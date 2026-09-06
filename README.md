@@ -104,6 +104,24 @@ cp .env.example .env
 Si `SENTRY_DSN` queda vacío, la aplicación funciona igual y solo escribe el log
 local. Con un DSN válido, además envía las excepciones no controladas a Sentry.
 
+### Qué llega a Sentry y qué no
+
+La distinción es deliberada y es la que hace que el panel sirva para algo:
+
+- **Los errores previstos del negocio no se reportan.** Un RUT mal escrito, un
+  código de equipo duplicado o una transición de estado no permitida son
+  situaciones esperadas: se le muestran al usuario y quedan en el log local.
+  Si se reportaran, el panel se llenaría de ruido y los defectos reales
+  quedarían enterrados.
+- **Los defectos inesperados sí se reportan.** Un archivo JSON corrupto, un
+  error de programación o cualquier excepción que no sea del dominio se envía
+  a Sentry con el actor y la operación que lo provocó.
+- **Quien ve el error recibe una referencia.** La aplicación le muestra el
+  identificador del evento, para que pueda citarlo al reportar el problema y
+  se encuentre el evento exacto en el panel.
+- **La suite de pruebas nunca envía eventos**, aunque tengas el DSN
+  configurado. Lo verifica el caso CP-39.
+
 ## Datos de demostración
 
 El repositorio ya trae datos cargados en `data/`. Para regenerarlos desde cero:

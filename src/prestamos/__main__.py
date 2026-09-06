@@ -19,8 +19,10 @@ def main() -> int:
         print("\nEntrada terminada. Hasta luego")
         return 0
     except Exception as fallo:
-        excepcion("error_fatal", fallo)
+        identificador = excepcion("error_fatal", fallo)
         print(f"\nError fatal: {fallo}")
+        if identificador:
+            print(f"Referencia del reporte: {identificador}")
         return 1
 
 

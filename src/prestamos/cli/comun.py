@@ -62,8 +62,10 @@ def ejecutar(accion, actor: str = "sistema"):
     except NotImplementedError as pendiente:
         aviso(f"Funcionalidad pendiente ({pendiente}). Ver los Issues del repositorio.")
     except Exception as fallo:
-        excepcion("error_inesperado", fallo, actor=actor)
+        identificador = excepcion("error_inesperado", fallo, actor=actor)
         error("Ocurrio un error inesperado. Se registro en el log de eventos.")
+        if identificador:
+            aviso(f"Referencia del reporte: {identificador}")
     return None
 
 
