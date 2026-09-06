@@ -3,32 +3,32 @@
     "rut": "12345678-5",
     "nombre": "Ana Perez",
     "correo": "ana.perez@alumnos.cl",
-    "contrasena_hash": "pbkdf2_sha256$120000$31a20195476530e9a94521cde4a68092$763b6d707b0fa87d2be2b817477f1fbdb1c997d10f08e271dffc99a83f24c64f",
+    "contrasena_hash": "pbkdf2_sha256$120000$f0e3c5edbee7b2b08e0f03ef5c2df7ed$50e9d8c8b6164322734a6fc8141a8227df739038ba9427429916b8a67488a727",
     "estado": "al_dia",
-    "creado_en": "2026-09-05T20:14:18-04:00"
+    "creado_en": "2026-09-06T19:11:30-03:00"
   },
   {
     "rut": "17890123-0",
     "nombre": "Bruno Silva",
     "correo": "bruno.silva@alumnos.cl",
-    "contrasena_hash": "pbkdf2_sha256$120000$2347bb99d74a818e1ec2e68e8c949e88$0f88c1bf23253363a8fbadfb4c17ec96a93efde9fbe9d6a12d7c171cab580bdb",
+    "contrasena_hash": "pbkdf2_sha256$120000$5ab85d05329603101e0ad734929635d6$52043b7d3d58932b276094c218edca98279ed9a13bbb3247c257e7ba50b83a6e",
     "estado": "al_dia",
-    "creado_en": "2026-09-05T20:14:18-04:00"
+    "creado_en": "2026-09-06T19:11:30-03:00"
   },
   {
     "rut": "9876543-3",
     "nombre": "Carla Munoz",
     "correo": "carla.munoz@profes.cl",
-    "contrasena_hash": "pbkdf2_sha256$120000$7f4794776c94564496214becfcf02f21$00f614cc160f63f4e6a546100e833021d4ec007ca4533160f4dd8792aef27eee",
+    "contrasena_hash": "pbkdf2_sha256$120000$a8f0972057ab75f06df6552b36872cf7$1cc48978397f09353d4b6b66e14fbe1bba9da129ac2de786473577ae66c0d103",
     "estado": "al_dia",
-    "creado_en": "2026-09-05T20:14:18-04:00"
+    "creado_en": "2026-09-06T19:11:30-03:00"
   },
   {
     "rut": "20111222-2",
     "nombre": "Diana Torres",
     "correo": "diana.torres@alumnos.cl",
-    "contrasena_hash": "pbkdf2_sha256$120000$22348533d4c35c305f833bf19bf915e0$02283d79b91a7954332f11f0f037bc99c1ad2f7f600916f99ed440607cb4cc20",
+    "contrasena_hash": "pbkdf2_sha256$120000$2f6e41526fbecfaf1ef75ff58e6f7fbc$8c283f941635a88b11a93091b12cdff2b3c2df6ec5ec7cad9e022f69b3132b4f",
     "estado": "pendiente",
-    "creado_en": "2026-09-05T20:14:18-04:00"
+    "creado_en": "2026-09-06T19:11:30-03:00"
   }
 ]
