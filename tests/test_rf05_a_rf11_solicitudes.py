@@ -24,14 +24,13 @@ from prestamos.servicios import solicitudes as srv_solicitudes
 
 from conftest import RUT_ANA, RUT_BRUNO
 
-pendiente = pytest.mark.xfail(raises=NotImplementedError, reason="RF05 a RF11 no implementados")
+pendiente = pytest.mark.xfail(raises=NotImplementedError, reason="RF06 a RF11 no implementados")
 
 HOY = date.today()
 MANANA = HOY + timedelta(days=1)
 EN_CINCO_DIAS = HOY + timedelta(days=5)
 
 
-@pendiente
 @pytest.mark.funcional
 def test_cp24_crear_solicitud_valida(datos_base, sesion_ana):
     """CP-24: RF05 crea la solicitud en estado por_revisar."""
@@ -41,7 +40,6 @@ def test_cp24_crear_solicitud_valida(datos_base, sesion_ana):
     assert creada["equipos"] == ["LAP-001"]
 
 
-@pendiente
 @pytest.mark.negativo
 def test_cp25_encargado_no_puede_crear_solicitudes(datos_base, sesion_encargado):
     """CP-25: solo los solicitantes generan solicitudes."""
@@ -49,7 +47,6 @@ def test_cp25_encargado_no_puede_crear_solicitudes(datos_base, sesion_encargado)
         srv_solicitudes.crear_solicitud(sesion_encargado, ["LAP-001"], MANANA, EN_CINCO_DIAS)
 
 
-@pendiente
 @pytest.mark.reglas
 def test_cp26_dos_equipos_de_la_misma_categoria(datos_base, sesion_ana):
     """CP-26: dos arduinos no son combinacion valida, un arduino y una tablet si."""
@@ -64,7 +61,6 @@ def test_cp26_dos_equipos_de_la_misma_categoria(datos_base, sesion_ana):
     assert len(valida["equipos"]) == 2
 
 
-@pendiente
 @pytest.mark.borde
 def test_cp27_tope_de_equipos_por_solicitud(datos_base, sesion_ana):
     """CP-27: cero equipos y tres equipos son invalidos."""
@@ -77,7 +73,6 @@ def test_cp27_tope_de_equipos_por_solicitud(datos_base, sesion_ana):
         )
 
 
-@pendiente
 @pytest.mark.borde
 def test_cp28_duracion_maxima_de_una_semana(datos_base, sesion_ana):
     """CP-28: 7 dias exactos se acepta, 8 dias se rechaza."""
@@ -88,7 +83,6 @@ def test_cp28_duracion_maxima_de_una_semana(datos_base, sesion_ana):
         srv_solicitudes.crear_solicitud(sesion_ana, ["TAB-001"], HOY, limite + timedelta(days=1))
 
 
-@pendiente
 @pytest.mark.reglas
 def test_cp29_equipo_ya_tomado_por_otra_persona(datos_base, sesion_bruno, crear_solicitud_directa):
     """CP-29: gana quien pidio primero; el segundo recibe ErrorDisponibilidad."""
@@ -98,7 +92,6 @@ def test_cp29_equipo_ya_tomado_por_otra_persona(datos_base, sesion_bruno, crear_
         srv_solicitudes.crear_solicitud(sesion_bruno, ["LAP-001"], MANANA, EN_CINCO_DIAS)
 
 
-@pendiente
 @pytest.mark.reglas
 def test_cp30_solicitante_pendiente_no_puede_pedir(datos_base, sesion_ana):
     """CP-30: un atraso previo bloquea nuevas solicitudes."""
@@ -112,7 +105,6 @@ def test_cp30_solicitante_pendiente_no_puede_pedir(datos_base, sesion_ana):
         srv_solicitudes.crear_solicitud(sesion_ana, ["LAP-001"], MANANA, EN_CINCO_DIAS)
 
 
-@pendiente
 @pytest.mark.reglas
 def test_cp31_con_dos_equipos_en_poder_no_puede_pedir_mas(
     datos_base, sesion_ana, crear_solicitud_directa

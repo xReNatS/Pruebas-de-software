@@ -105,3 +105,37 @@ El campo `estado` del equipo podría desincronizarse de las solicitudes.
 
 **Decisión:** el único valor manual es `fuera_de_servicio`. Los valores
 `disponible` y `en_uso` se calculan leyendo las solicitudes activas.
+
+## A13. "Varias solicitudes activas solo si son en fechas diferentes"
+
+El cliente respondió que un solicitante puede tener varias solicitudes activas
+a la vez **siempre que sean en fechas diferentes**. Esa condición no está
+implementada, y con el diseño actual no puede estarlo.
+
+**Por qué.** La decisión A05 hace que toda solicitud activa bloquee sus equipos
+desde el momento en que se registra, sin ventana de fechas. En consecuencia, las
+fechas no participan del cálculo de disponibilidad ni del control de límites:
+pedir dos laptops separadas por un mes se rechaza exactamente igual que pedirlas
+juntas, porque en ambos casos la persona tiene dos equipos de la misma categoría
+comprometidos.
+
+**Decisión.** Se mantiene el comportamiento actual y se documenta la
+divergencia, en vez de implementar la condición de fechas. Aceptarla obligaría a
+calcular la disponibilidad por rango, que es justamente lo que A05 descartó
+porque un préstamo puede extenderse y el sistema no puede prometer que una
+unidad se desocupe en una fecha futura.
+
+**Qué sí sobrevive de la regla del cliente.** Un solicitante puede tener varias
+solicitudes activas al mismo tiempo. Lo que no puede es superar los dos equipos
+simultáneos ni repetir categoría, sin importar cómo reparta el pedido entre
+solicitudes ni qué fechas elija. Los casos CP-50 y CP-51 lo verifican.
+
+**Riesgo que queda.** Un solicitante que necesita el mismo tipo de equipo en dos
+semanas distintas tiene que esperar a que se cierre el primer préstamo antes de
+poder reservar el segundo. Es una pérdida de comodidad real, aceptada a cambio
+de no prometer fechas de liberación que el sistema no puede garantizar.
+
+**Cómo se detectó.** No salió de leer el enunciado, sino de probar el sistema:
+al revisar la corrección de los defectos \#27 y \#28 se ensayó el escenario de
+dos solicitudes con un mes de diferencia, y el rechazo dejó en evidencia que la
+condición de fechas nunca había sido trasladada a una regla.
