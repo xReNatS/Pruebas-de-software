@@ -1,0 +1,234 @@
+[
+  {
+    "id": "SOL-0001",
+    "rut_solicitante": "12345678-5",
+    "equipos": [
+      "LAP-001"
+    ],
+    "fecha_retiro": "2026-09-06",
+    "fecha_devolucion": "2026-09-11",
+    "estado": "por_revisar",
+    "renovaciones": 0,
+    "devolucion_declarada_en": null,
+    "motivo": null,
+    "creado_en": "2026-09-05T20:14:18-04:00",
+    "historial": [
+      {
+        "estado": "por_revisar",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "12345678-5"
+      }
+    ]
+  },
+  {
+    "id": "SOL-0002",
+    "rut_solicitante": "17890123-0",
+    "equipos": [
+      "TAB-001",
+      "ARD-001"
+    ],
+    "fecha_retiro": "2026-09-05",
+    "fecha_devolucion": "2026-09-10",
+    "estado": "aprobada",
+    "renovaciones": 0,
+    "devolucion_declarada_en": null,
+    "motivo": null,
+    "creado_en": "2026-09-05T20:14:18-04:00",
+    "historial": [
+      {
+        "estado": "por_revisar",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "17890123-0"
+      },
+      {
+        "estado": "aprobada",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "ENC-0001",
+        "motivo": null
+      }
+    ]
+  },
+  {
+    "id": "SOL-0003",
+    "rut_solicitante": "9876543-3",
+    "equipos": [
+      "PRO-001"
+    ],
+    "fecha_retiro": "2026-09-03",
+    "fecha_devolucion": "2026-09-08",
+    "estado": "en_prestamo",
+    "renovaciones": 0,
+    "devolucion_declarada_en": null,
+    "motivo": null,
+    "creado_en": "2026-09-05T20:14:18-04:00",
+    "historial": [
+      {
+        "estado": "por_revisar",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "9876543-3"
+      },
+      {
+        "estado": "aprobada",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "ENC-0001",
+        "motivo": null
+      },
+      {
+        "estado": "en_prestamo",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "ENC-0001",
+        "motivo": null
+      }
+    ]
+  },
+  {
+    "id": "SOL-0004",
+    "rut_solicitante": "12345678-5",
+    "equipos": [
+      "ARD-003"
+    ],
+    "fecha_retiro": "2026-08-28",
+    "fecha_devolucion": "2026-09-04",
+    "estado": "periodo_gracia",
+    "renovaciones": 0,
+    "devolucion_declarada_en": null,
+    "motivo": null,
+    "creado_en": "2026-09-05T20:14:18-04:00",
+    "historial": [
+      {
+        "estado": "por_revisar",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "12345678-5"
+      },
+      {
+        "estado": "aprobada",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "ENC-0002",
+        "motivo": null
+      },
+      {
+        "estado": "en_prestamo",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "ENC-0002",
+        "motivo": null
+      },
+      {
+        "estado": "periodo_gracia",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "sistema",
+        "motivo": null
+      }
+    ]
+  },
+  {
+    "id": "SOL-0005",
+    "rut_solicitante": "20111222-2",
+    "equipos": [
+      "CAM-001"
+    ],
+    "fecha_retiro": "2026-08-24",
+    "fecha_devolucion": "2026-08-31",
+    "estado": "atrasada",
+    "renovaciones": 0,
+    "devolucion_declarada_en": null,
+    "motivo": null,
+    "creado_en": "2026-09-05T20:14:18-04:00",
+    "historial": [
+      {
+        "estado": "por_revisar",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "20111222-2"
+      },
+      {
+        "estado": "aprobada",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "ENC-0001",
+        "motivo": null
+      },
+      {
+        "estado": "en_prestamo",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "ENC-0001",
+        "motivo": null
+      },
+      {
+        "estado": "periodo_gracia",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "sistema",
+        "motivo": null
+      },
+      {
+        "estado": "atrasada",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "sistema",
+        "motivo": null
+      }
+    ]
+  },
+  {
+    "id": "SOL-0006",
+    "rut_solicitante": "17890123-0",
+    "equipos": [
+      "LAP-003"
+    ],
+    "fecha_retiro": "2026-08-16",
+    "fecha_devolucion": "2026-08-22",
+    "estado": "concluida",
+    "renovaciones": 0,
+    "devolucion_declarada_en": null,
+    "motivo": null,
+    "creado_en": "2026-09-05T20:14:18-04:00",
+    "historial": [
+      {
+        "estado": "por_revisar",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "17890123-0"
+      },
+      {
+        "estado": "aprobada",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "ENC-0001",
+        "motivo": null
+      },
+      {
+        "estado": "en_prestamo",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "ENC-0001",
+        "motivo": null
+      },
+      {
+        "estado": "concluida",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "ENC-0001",
+        "motivo": null
+      }
+    ]
+  },
+  {
+    "id": "SOL-0007",
+    "rut_solicitante": "9876543-3",
+    "equipos": [
+      "LAP-002"
+    ],
+    "fecha_retiro": "2026-09-02",
+    "fecha_devolucion": "2026-09-07",
+    "estado": "rechazada",
+    "renovaciones": 0,
+    "devolucion_declarada_en": null,
+    "motivo": "Equipo reservado para clases",
+    "creado_en": "2026-09-05T20:14:18-04:00",
+    "historial": [
+      {
+        "estado": "por_revisar",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "9876543-3"
+      },
+      {
+        "estado": "rechazada",
+        "en": "2026-09-05T20:14:18-04:00",
+        "actor": "ENC-0002",
+        "motivo": "Equipo reservado para clases"
+      }
+    ]
+  }
+]

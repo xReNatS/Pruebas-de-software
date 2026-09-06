@@ -1,0 +1,82 @@
+[
+  {
+    "codigo": "LAP-001",
+    "nombre": "Notebook Dell Latitude",
+    "categoria": "laptop",
+    "estado": "disponible",
+    "descripcion": "16 GB RAM, cargador incluido",
+    "creado_en": "2026-09-05T20:14:18-04:00"
+  },
+  {
+    "codigo": "LAP-002",
+    "nombre": "Notebook Dell Latitude",
+    "categoria": "laptop",
+    "estado": "disponible",
+    "descripcion": "16 GB RAM, cargador incluido",
+    "creado_en": "2026-09-05T20:14:18-04:00"
+  },
+  {
+    "codigo": "LAP-003",
+    "nombre": "Notebook Lenovo ThinkPad",
+    "categoria": "laptop",
+    "estado": "disponible",
+    "descripcion": "8 GB RAM",
+    "creado_en": "2026-09-05T20:14:18-04:00"
+  },
+  {
+    "codigo": "TAB-001",
+    "nombre": "Tablet Samsung Galaxy Tab",
+    "categoria": "tablet",
+    "estado": "disponible",
+    "descripcion": "Con lapiz optico",
+    "creado_en": "2026-09-05T20:14:18-04:00"
+  },
+  {
+    "codigo": "TAB-002",
+    "nombre": "Tablet Samsung Galaxy Tab",
+    "categoria": "tablet",
+    "estado": "disponible",
+    "descripcion": "Sin lapiz optico",
+    "creado_en": "2026-09-05T20:14:18-04:00"
+  },
+  {
+    "codigo": "ARD-001",
+    "nombre": "Kit Arduino Uno",
+    "categoria": "arduino",
+    "estado": "disponible",
+    "descripcion": "Kit completo con protoboard",
+    "creado_en": "2026-09-05T20:14:18-04:00"
+  },
+  {
+    "codigo": "ARD-002",
+    "nombre": "Kit Arduino Uno",
+    "categoria": "arduino",
+    "estado": "disponible",
+    "descripcion": "Kit completo con protoboard",
+    "creado_en": "2026-09-05T20:14:18-04:00"
+  },
+  {
+    "codigo": "ARD-003",
+    "nombre": "Kit Arduino Mega",
+    "categoria": "arduino",
+    "estado": "disponible",
+    "descripcion": "Incluye sensores",
+    "creado_en": "2026-09-05T20:14:18-04:00"
+  },
+  {
+    "codigo": "PRO-001",
+    "nombre": "Proyector Epson",
+    "categoria": "proyector",
+    "estado": "disponible",
+    "descripcion": "Con control remoto y cable HDMI",
+    "creado_en": "2026-09-05T20:14:18-04:00"
+  },
+  {
+    "codigo": "CAM-001",
+    "nombre": "Camara Canon EOS",
+    "categoria": "camara",
+    "estado": "disponible",
+    "descripcion": "Con tripode y bateria de repuesto",
+    "creado_en": "2026-09-05T20:14:18-04:00"
+  }
+]

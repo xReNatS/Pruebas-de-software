@@ -1,0 +1,6 @@
+# Dependencias de ejecucion
+python-dotenv==1.0.1
+sentry-sdk==2.19.2
+
+# Dependencias de pruebas
+pytest==8.3.4
