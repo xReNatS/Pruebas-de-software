@@ -131,8 +131,13 @@ python scripts/cargar_demo.py --forzar
 ```
 
 El escenario incluye 2 encargados, 4 solicitantes, 10 unidades de equipo en
-cinco categorías y 7 solicitudes, una por cada estado relevante, de modo que se
-puede probar un atraso o un período de gracia sin esperar días reales.
+cinco categorías y 8 solicitudes, una por cada estado de la máquina, de modo
+que se puede mostrar un atraso o un período de gracia sin esperar días reales.
+Una de las unidades está fuera de servicio, para poder ver los tres estados
+posibles de un equipo.
+
+Para recorrerlo paso a paso hay un
+[guion de demostración](docs/guion-demostracion.md) de cinco minutos.
 
 Credenciales de demostración, públicas a propósito y válidas solo para este
 ejercicio:
@@ -194,12 +199,13 @@ src/prestamos/
   validaciones.py    RUT, correo, fechas, rangos
   seguridad.py       hash de contraseñas
   registro.py        log de eventos e integración con Sentry
+  demo.py            escenario de demostración
   servicios/         un módulo por área funcional
   cli/               menús de línea de comando
 data/                archivos JSON de persistencia
 docs/                reglas, estados, supuestos, trazabilidad y estrategia
 evidencias/          salidas de ejecución de las pruebas, por fecha
-scripts/             carga de datos de demostración
+scripts/             envoltura de línea de comando para la carga de demo
 tests/               suite de pytest
 ```
 
@@ -210,6 +216,7 @@ tests/               suite de pytest
 - [Supuestos y ambigüedades detectadas](docs/supuestos.md)
 - [Matriz de trazabilidad](docs/matriz-trazabilidad.md)
 - [Estrategia de pruebas](docs/estrategia-pruebas.md)
+- [Guion de demostración](docs/guion-demostracion.md)
 - [Flujo de trabajo con Git y reparto del equipo](docs/flujo-git.md)
 - [Evidencia de la integración con Sentry](evidencias/sentry/README.md)
 

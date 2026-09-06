@@ -40,15 +40,17 @@ caso, ninguno de los tres puede declararse cerrado en el informe.
 | INF01 | Todo evento relevante queda en el log con su actor, y un defecto inesperado se convierte en mensaje sin tumbar la aplicación | `registro.py`, `cli/comun.py` | CP-40, CP-41, CP-43 | Aprobado |
 | INF02 | Los errores previstos del negocio no se reportan a Sentry, y la suite nunca envía eventos al panel real | `registro.py`, `config.py` | CP-39, CP-42 | Aprobado |
 | INF03 | Un defecto real llega a Sentry con traza, variables locales, migas de pan y el commit que lo produjo | `registro.py` | Verificación manual, ver `evidencias/sentry/` | Aprobado |
+| DEM01 | El escenario de demostración incluye un ejemplo de cada estado de solicitud y de equipo, y un solicitante bloqueado por atraso | `demo.py` | CP-45, CP-46, CP-47 | Aprobado |
+| DEM02 | La demostración es reproducible con un comando y el guion no se desactualiza en silencio | `demo.py`, `docs/guion-demostracion.md` | CP-44, CP-48, CP-49 | Aprobado |
 
 ## Cobertura por categoría exigida
 
 | Categoría | Mínimo pedido | Casos |
 | --- | --- | --- |
-| Funcionales | 5 | CP-01, CP-02, CP-06, CP-10, CP-12, CP-16, CP-19, CP-23, CP-24, CP-32, CP-40 |
-| De borde | 4 | CP-04, CP-09, CP-14, CP-20, CP-27, CP-28, CP-36, CP-43 |
-| Negativos o con entradas inválidas | 3 | CP-03, CP-05, CP-07, CP-08, CP-13, CP-15, CP-17, CP-18, CP-21, CP-22, CP-25, CP-33, CP-34, CP-39, CP-41, CP-42 |
-| Que combinan reglas | 2 | CP-11, CP-26, CP-29, CP-30, CP-31, CP-35, CP-37 |
+| Funcionales | 5 | CP-01, CP-02, CP-06, CP-10, CP-12, CP-16, CP-19, CP-23, CP-24, CP-32, CP-40, CP-45, CP-46 |
+| De borde | 4 | CP-04, CP-09, CP-14, CP-20, CP-27, CP-28, CP-36, CP-43, CP-44, CP-48 |
+| Negativos o con entradas inválidas | 3 | CP-03, CP-05, CP-07, CP-08, CP-13, CP-15, CP-17, CP-18, CP-21, CP-22, CP-25, CP-33, CP-34, CP-39, CP-41, CP-42, CP-49 |
+| Que combinan reglas | 2 | CP-11, CP-26, CP-29, CP-30, CP-31, CP-35, CP-37, CP-47 |
 | Escenario completo | 1 | CP-38 |
 
 Las categorías están declaradas como marcas de pytest, de modo que el recuento

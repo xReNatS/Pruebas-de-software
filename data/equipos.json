@@ -5,7 +5,7 @@
     "categoria": "laptop",
     "estado": "disponible",
     "descripcion": "16 GB RAM, cargador incluido",
-    "creado_en": "2026-09-05T20:14:18-04:00"
+    "creado_en": "2026-09-06T19:11:30-03:00"
   },
   {
     "codigo": "LAP-002",
@@ -13,7 +13,7 @@
     "categoria": "laptop",
     "estado": "disponible",
     "descripcion": "16 GB RAM, cargador incluido",
-    "creado_en": "2026-09-05T20:14:18-04:00"
+    "creado_en": "2026-09-06T19:11:30-03:00"
   },
   {
     "codigo": "LAP-003",
@@ -21,7 +21,7 @@
     "categoria": "laptop",
     "estado": "disponible",
     "descripcion": "8 GB RAM",
-    "creado_en": "2026-09-05T20:14:18-04:00"
+    "creado_en": "2026-09-06T19:11:30-03:00"
   },
   {
     "codigo": "TAB-001",
@@ -29,15 +29,16 @@
     "categoria": "tablet",
     "estado": "disponible",
     "descripcion": "Con lapiz optico",
-    "creado_en": "2026-09-05T20:14:18-04:00"
+    "creado_en": "2026-09-06T19:11:30-03:00"
   },
   {
     "codigo": "TAB-002",
     "nombre": "Tablet Samsung Galaxy Tab",
     "categoria": "tablet",
-    "estado": "disponible",
+    "estado": "fuera_de_servicio",
     "descripcion": "Sin lapiz optico",
-    "creado_en": "2026-09-05T20:14:18-04:00"
+    "creado_en": "2026-09-06T19:11:30-03:00",
+    "motivo_fuera_servicio": "Pantalla trizada, en reparacion"
   },
   {
     "codigo": "ARD-001",
@@ -45,7 +46,7 @@
     "categoria": "arduino",
     "estado": "disponible",
     "descripcion": "Kit completo con protoboard",
-    "creado_en": "2026-09-05T20:14:18-04:00"
+    "creado_en": "2026-09-06T19:11:30-03:00"
   },
   {
     "codigo": "ARD-002",
@@ -53,7 +54,7 @@
     "categoria": "arduino",
     "estado": "disponible",
     "descripcion": "Kit completo con protoboard",
-    "creado_en": "2026-09-05T20:14:18-04:00"
+    "creado_en": "2026-09-06T19:11:30-03:00"
   },
   {
     "codigo": "ARD-003",
@@ -61,7 +62,7 @@
     "categoria": "arduino",
     "estado": "disponible",
     "descripcion": "Incluye sensores",
-    "creado_en": "2026-09-05T20:14:18-04:00"
+    "creado_en": "2026-09-06T19:11:30-03:00"
   },
   {
     "codigo": "PRO-001",
@@ -69,7 +70,7 @@
     "categoria": "proyector",
     "estado": "disponible",
     "descripcion": "Con control remoto y cable HDMI",
-    "creado_en": "2026-09-05T20:14:18-04:00"
+    "creado_en": "2026-09-06T19:11:30-03:00"
   },
   {
     "codigo": "CAM-001",
@@ -77,6 +78,6 @@
     "categoria": "camara",
     "estado": "disponible",
     "descripcion": "Con tripode y bateria de repuesto",
-    "creado_en": "2026-09-05T20:14:18-04:00"
+    "creado_en": "2026-09-06T19:11:30-03:00"
   }
 ]

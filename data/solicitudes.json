@@ -5,17 +5,17 @@
     "equipos": [
       "LAP-001"
     ],
-    "fecha_retiro": "2026-09-06",
-    "fecha_devolucion": "2026-09-11",
+    "fecha_retiro": "2026-09-07",
+    "fecha_devolucion": "2026-09-12",
     "estado": "por_revisar",
     "renovaciones": 0,
     "devolucion_declarada_en": null,
     "motivo": null,
-    "creado_en": "2026-09-05T20:14:18-04:00",
+    "creado_en": "2026-09-06T19:11:30-03:00",
     "historial": [
       {
         "estado": "por_revisar",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "12345678-5"
       }
     ]
@@ -27,22 +27,22 @@
       "TAB-001",
       "ARD-001"
     ],
-    "fecha_retiro": "2026-09-05",
-    "fecha_devolucion": "2026-09-10",
+    "fecha_retiro": "2026-09-06",
+    "fecha_devolucion": "2026-09-11",
     "estado": "aprobada",
     "renovaciones": 0,
     "devolucion_declarada_en": null,
     "motivo": null,
-    "creado_en": "2026-09-05T20:14:18-04:00",
+    "creado_en": "2026-09-06T19:11:30-03:00",
     "historial": [
       {
         "estado": "por_revisar",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "17890123-0"
       },
       {
         "estado": "aprobada",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "ENC-0001",
         "motivo": null
       }
@@ -54,28 +54,28 @@
     "equipos": [
       "PRO-001"
     ],
-    "fecha_retiro": "2026-09-03",
-    "fecha_devolucion": "2026-09-08",
+    "fecha_retiro": "2026-09-04",
+    "fecha_devolucion": "2026-09-09",
     "estado": "en_prestamo",
     "renovaciones": 0,
     "devolucion_declarada_en": null,
     "motivo": null,
-    "creado_en": "2026-09-05T20:14:18-04:00",
+    "creado_en": "2026-09-06T19:11:30-03:00",
     "historial": [
       {
         "estado": "por_revisar",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "9876543-3"
       },
       {
         "estado": "aprobada",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "ENC-0001",
         "motivo": null
       },
       {
         "estado": "en_prestamo",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "ENC-0001",
         "motivo": null
       }
@@ -87,34 +87,34 @@
     "equipos": [
       "ARD-003"
     ],
-    "fecha_retiro": "2026-08-28",
-    "fecha_devolucion": "2026-09-04",
+    "fecha_retiro": "2026-08-29",
+    "fecha_devolucion": "2026-09-05",
     "estado": "periodo_gracia",
     "renovaciones": 0,
     "devolucion_declarada_en": null,
     "motivo": null,
-    "creado_en": "2026-09-05T20:14:18-04:00",
+    "creado_en": "2026-09-06T19:11:30-03:00",
     "historial": [
       {
         "estado": "por_revisar",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "12345678-5"
       },
       {
         "estado": "aprobada",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "ENC-0002",
         "motivo": null
       },
       {
         "estado": "en_prestamo",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "ENC-0002",
         "motivo": null
       },
       {
         "estado": "periodo_gracia",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "sistema",
         "motivo": null
       }
@@ -126,40 +126,40 @@
     "equipos": [
       "CAM-001"
     ],
-    "fecha_retiro": "2026-08-24",
-    "fecha_devolucion": "2026-08-31",
+    "fecha_retiro": "2026-08-25",
+    "fecha_devolucion": "2026-09-01",
     "estado": "atrasada",
     "renovaciones": 0,
     "devolucion_declarada_en": null,
     "motivo": null,
-    "creado_en": "2026-09-05T20:14:18-04:00",
+    "creado_en": "2026-09-06T19:11:30-03:00",
     "historial": [
       {
         "estado": "por_revisar",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "20111222-2"
       },
       {
         "estado": "aprobada",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "ENC-0001",
         "motivo": null
       },
       {
         "estado": "en_prestamo",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "ENC-0001",
         "motivo": null
       },
       {
         "estado": "periodo_gracia",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "sistema",
         "motivo": null
       },
       {
         "estado": "atrasada",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "sistema",
         "motivo": null
       }
@@ -171,34 +171,34 @@
     "equipos": [
       "LAP-003"
     ],
-    "fecha_retiro": "2026-08-16",
-    "fecha_devolucion": "2026-08-22",
+    "fecha_retiro": "2026-08-17",
+    "fecha_devolucion": "2026-08-23",
     "estado": "concluida",
     "renovaciones": 0,
     "devolucion_declarada_en": null,
     "motivo": null,
-    "creado_en": "2026-09-05T20:14:18-04:00",
+    "creado_en": "2026-09-06T19:11:30-03:00",
     "historial": [
       {
         "estado": "por_revisar",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "17890123-0"
       },
       {
         "estado": "aprobada",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "ENC-0001",
         "motivo": null
       },
       {
         "estado": "en_prestamo",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "ENC-0001",
         "motivo": null
       },
       {
         "estado": "concluida",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "ENC-0001",
         "motivo": null
       }
@@ -210,24 +210,57 @@
     "equipos": [
       "LAP-002"
     ],
-    "fecha_retiro": "2026-09-02",
-    "fecha_devolucion": "2026-09-07",
+    "fecha_retiro": "2026-09-03",
+    "fecha_devolucion": "2026-09-08",
     "estado": "rechazada",
     "renovaciones": 0,
     "devolucion_declarada_en": null,
     "motivo": "Equipo reservado para clases",
-    "creado_en": "2026-09-05T20:14:18-04:00",
+    "creado_en": "2026-09-06T19:11:30-03:00",
     "historial": [
       {
         "estado": "por_revisar",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "9876543-3"
       },
       {
         "estado": "rechazada",
-        "en": "2026-09-05T20:14:18-04:00",
+        "en": "2026-09-06T19:11:30-03:00",
         "actor": "ENC-0002",
         "motivo": "Equipo reservado para clases"
+      }
+    ]
+  },
+  {
+    "id": "SOL-0008",
+    "rut_solicitante": "17890123-0",
+    "equipos": [
+      "ARD-002"
+    ],
+    "fecha_retiro": "2026-09-05",
+    "fecha_devolucion": "2026-09-10",
+    "estado": "cancelada",
+    "renovaciones": 0,
+    "devolucion_declarada_en": null,
+    "motivo": "Ya no necesito el kit",
+    "creado_en": "2026-09-06T19:11:30-03:00",
+    "historial": [
+      {
+        "estado": "por_revisar",
+        "en": "2026-09-06T19:11:30-03:00",
+        "actor": "17890123-0"
+      },
+      {
+        "estado": "aprobada",
+        "en": "2026-09-06T19:11:30-03:00",
+        "actor": "ENC-0001",
+        "motivo": null
+      },
+      {
+        "estado": "cancelada",
+        "en": "2026-09-06T19:11:30-03:00",
+        "actor": "17890123-0",
+        "motivo": "Ya no necesito el kit"
       }
     ]
   }
