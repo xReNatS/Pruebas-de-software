@@ -96,6 +96,7 @@ function Objetivo-Ayuda {
     Write-Host "  .\make.ps1 probar-escenario    solo el escenario completo"
     Write-Host "  .\make.ps1 probar-pendientes   lista los casos aun marcados xfail"
     Write-Host ""
+    Write-Host "  .\make.ps1 planilla            regenera la planilla de casos de prueba"
     Write-Host "  .\make.ps1 evidencia           guarda la salida de las pruebas en evidencias\"
     Write-Host "  .\make.ps1 demo                regenera los datos de demostracion"
     Write-Host "  .\make.ps1 reiniciar           borra datos y logs, y vuelve a cargar la demo"
@@ -148,6 +149,10 @@ function Objetivo-ProbarPendientes {
     else {
         Write-Host "  Ninguno. Todos los requerimientos estan implementados." -ForegroundColor Green
     }
+}
+
+function Objetivo-Planilla {
+    Invoke-Python @("scripts\generar_planilla.py")
 }
 
 function Objetivo-Evidencia {
@@ -240,6 +245,7 @@ switch ($Objetivo.ToLower()) {
     "probar-reglas"     { Objetivo-ProbarMarca "reglas" }
     "probar-escenario"  { Objetivo-ProbarMarca "escenario" }
     "probar-pendientes" { Objetivo-ProbarPendientes }
+    "planilla"          { Objetivo-Planilla }
     "evidencia"         { Objetivo-Evidencia }
     "demo"              { Objetivo-Demo }
     "reiniciar"         { Objetivo-Reiniciar }

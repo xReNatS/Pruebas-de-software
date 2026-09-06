@@ -49,6 +49,7 @@ ayuda:
 	@echo "  make probar-escenario    solo el escenario completo"
 	@echo "  make probar-pendientes   lista los casos aun marcados xfail"
 	@echo ""
+	@echo "  make planilla            regenera la planilla de casos de prueba"
 	@echo "  make evidencia           guarda la salida de las pruebas en evidencias/"
 	@echo "  make demo                regenera los datos de demostracion"
 	@echo "  make reiniciar           borra datos y logs, y vuelve a cargar la demo"
@@ -90,6 +91,9 @@ probar-escenario:
 probar-pendientes:
 	@echo "Casos a la espera de que se implemente su requerimiento:"
 	@$(PYTEST) -q -rx 2>&1 | grep XFAIL || echo "  Ninguno. Todos los requerimientos estan implementados."
+
+planilla:
+	$(PYTHON) scripts/generar_planilla.py
 
 evidencia:
 	@mkdir -p evidencias

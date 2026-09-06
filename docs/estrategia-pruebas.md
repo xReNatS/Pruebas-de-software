@@ -52,7 +52,28 @@ reales ni depender de código todavía no implementado.
 
 ## Registro de evidencias
 
-La salida de la ejecución se guarda como archivo de texto por fecha:
+La planilla de casos de prueba **se genera, no se escribe a mano**:
+
+```bash
+make planilla          # Linux o macOS
+.\make.ps1 planilla    # Windows
+```
+
+Produce `evidencias/planilla-casos-de-prueba.csv`, listo para pegar en la
+planilla del Aula, y `docs/casos-de-prueba.md` con la misma tabla en formato
+legible. El resultado obtenido y el estado de cada caso salen de ejecutar la
+suite de verdad, no de lo que alguien recuerde: la tarea considera incompleto
+un caso que solo tenga el resultado esperado, y escribir a mano el obtenido es
+la forma más fácil de que la planilla y el código dejen de coincidir.
+
+El generador distingue tres situaciones que no son lo mismo:
+
+- **Aprobado**, el caso pasa.
+- **Defecto abierto**, el caso falla por un defecto ya registrado como Issue, y
+  la planilla cita el número.
+- **Pendiente de implementar**, el caso espera a que exista su requerimiento.
+
+Además, la salida de la ejecución se guarda como archivo de texto por fecha:
 
 ```bash
 python -m pytest -v > evidencias/pytest-AAAA-MM-DD.txt

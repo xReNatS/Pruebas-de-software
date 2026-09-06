@@ -30,6 +30,7 @@ requiere instalar nada. En Linux o macOS se usa `make`.
 | `verificar` | Ejecuta la suite y muestra el recuento de casos por categoría |
 | `probar-funcional`, `probar-borde`, `probar-negativo`, `probar-reglas`, `probar-escenario` | Ejecuta solo esa categoría de casos |
 | `probar-pendientes` | Lista los casos que esperan la implementación de su requerimiento |
+| `planilla` | Regenera la planilla de casos de prueba desde la suite real |
 | `evidencia` | Guarda la salida de las pruebas en `evidencias/` con la fecha |
 | `demo` | Regenera los datos de demostración |
 | `reiniciar` | Borra datos y logs, y vuelve a cargar la demostración |
@@ -215,6 +216,7 @@ tests/               suite de pytest
 - [Estados y transiciones del préstamo](docs/estados-y-transiciones.md)
 - [Supuestos y ambigüedades detectadas](docs/supuestos.md)
 - [Matriz de trazabilidad](docs/matriz-trazabilidad.md)
+- [Casos de prueba, con su resultado real](docs/casos-de-prueba.md)
 - [Estrategia de pruebas](docs/estrategia-pruebas.md)
 - [Guion de demostración](docs/guion-demostracion.md)
 - [Flujo de trabajo con Git y reparto del equipo](docs/flujo-git.md)
