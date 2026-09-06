@@ -23,6 +23,7 @@ trazabilidad. Las constantes viven en `src/prestamos/reglas.py`.
 | RN13 | El solicitante puede devolver antes de tiempo | `servicios.prestamos.declarar_devolucion` |
 | RN14 | Estudiantes y profesores se rigen por los mismos límites | No hay distinción de subtipo en el modelo |
 | RN15 | El estado `atrasada` lo calcula el sistema por fecha, nunca una persona | `estados.TRANSICIONES`, rol `sistema` |
+| RN16 | Un solicitante puede tener varias solicitudes activas, pero los límites de RN01 y RN02 se aplican sobre la suma de todas ellas, no sobre cada una por separado | `servicios.solicitudes.crear_solicitud` |
 
 ## Alcance: lo que el sistema sí hace
 
@@ -47,6 +48,9 @@ trazabilidad. Las constantes viven en `src/prestamos/reglas.py`.
 - Notificaciones por correo o mensajería.
 - Reserva por rango de fechas con liberación automática. Un equipo tomado
   queda bloqueado hasta que la solicitud se cierra.
+- Solicitudes simultáneas de la misma categoría separadas por fechas. El
+  cliente lo mencionó, pero es incompatible con la decisión de bloquear desde
+  el registro. La divergencia está documentada en `supuestos.md`, punto A13.
 
 ## Requerimientos funcionales
 

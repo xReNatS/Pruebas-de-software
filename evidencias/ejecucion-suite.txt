@@ -76,8 +76,8 @@ tests/test_rf05_a_rf11_solicitudes.py::test_cp35_declarar_devolucion_no_libera_e
 tests/test_rf05_a_rf11_solicitudes.py::test_cp36_una_sola_renovacion XFAIL [ 79%]
 tests/test_rf05_a_rf11_solicitudes.py::test_cp37_atraso_deja_al_solicitante_pendiente XFAIL [ 80%]
 tests/test_rf05_a_rf11_solicitudes.py::test_cp38_escenario_completo_de_solicitud_a_devolucion XFAIL [ 81%]
-tests/test_rf05_reglas_cruzadas.py::test_cp50_varias_solicitudes_no_pueden_superar_el_tope XFAIL [ 82%]
-tests/test_rf05_reglas_cruzadas.py::test_cp51_dos_solicitudes_no_pueden_dar_dos_equipos_de_la_misma_categoria XFAILud) [ 83%]
+tests/test_rf05_reglas_cruzadas.py::test_cp50_varias_solicitudes_no_pueden_superar_el_tope PASSED [ 82%]
+tests/test_rf05_reglas_cruzadas.py::test_cp51_dos_solicitudes_no_pueden_dar_dos_equipos_de_la_misma_categoria PASSED [ 83%]
 tests/test_rf05_reglas_cruzadas.py::test_cp52_no_se_puede_pedir_para_fechas_ya_pasadas XFAIL [ 84%]
 tests/test_rf05_reglas_cruzadas.py::test_cp53_bordes_de_duracion_del_prestamo PASSED [ 86%]
 tests/test_rf05_reglas_cruzadas.py::test_cp54_no_se_puede_pedir_una_unidad_fuera_de_servicio PASSED [ 87%]
@@ -93,5 +93,5 @@ tests/test_validaciones.py::test_cp15_rut_invalido_es_rechazado[None] PASSED [ 9
 tests/test_validaciones.py::test_cp15_rut_invalido_es_rechazado[abcdefgh-1] PASSED [ 98%]
 tests/test_validaciones.py::test_cp15_rut_invalido_es_rechazado[12345678] PASSED [100%]
 
----- generated xml file: C:\Users\renar\AppData\Local\Temp\tmpjr_2pwum.xml ----
-======================= 76 passed, 10 xfailed in 25.24s =======================
+---- generated xml file: C:\Users\renar\AppData\Local\Temp\tmpxnkd_ppw.xml ----
+======================= 78 passed, 8 xfailed in 27.23s ========================
