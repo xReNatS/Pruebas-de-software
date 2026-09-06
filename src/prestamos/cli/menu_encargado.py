@@ -11,6 +11,8 @@ from .comun import aviso, ejecutar, menu, pedir, pedir_secreto, tabla, titulo
 OPCIONES = [
     ("solicitante", "Registrar solicitante (RF02)"),
     ("encargado", "Registrar encargado (RF02)"),
+    ("personas", "Ver personas autorizadas (RF02)"),
+    ("estado", "Cambiar estado de un solicitante (RF02)"),
     ("equipo", "Registrar equipo (RF03)"),
     ("catalogo", "Ver catalogo de equipos (RF04)"),
     ("solicitudes", "Ver y filtrar solicitudes (RF06)"),
@@ -46,6 +48,24 @@ def _despachar(sesion: Sesion, opcion: str) -> None:
         correo = pedir("Correo")
         clave = pedir_secreto("Contrasena")
         ejecutar(lambda: srv_personas.registrar_encargado(sesion, nombre, correo, clave), actor)
+
+    elif opcion == "personas":
+        solicitantes = ejecutar(lambda: srv_personas.listar_solicitantes(sesion), actor)
+        if solicitantes is not None:
+            aviso("Solicitantes:")
+            tabla(
+                solicitantes,
+                [("rut", "RUT"), ("nombre", "NOMBRE"), ("correo", "CORREO"), ("estado", "ESTADO")],
+            )
+        encargados = ejecutar(lambda: srv_personas.listar_encargados(sesion), actor)
+        if encargados is not None:
+            aviso("Encargados:")
+            tabla(encargados, [("id", "ID"), ("nombre", "NOMBRE"), ("correo", "CORREO")])
+
+    elif opcion == "estado":
+        rut = pedir("RUT del solicitante")
+        estado = pedir("Nuevo estado (al_dia / pendiente)")
+        ejecutar(lambda: srv_personas.cambiar_estado_solicitante(sesion, rut, estado), actor)
 
     elif opcion == "equipo":
         codigo = pedir("Codigo")
