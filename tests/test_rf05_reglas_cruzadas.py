@@ -1,12 +1,12 @@
 """RF05, casos que combinan reglas o intentan romperlas. CP-50 a CP-55.
 
-Prueba cruzada: RF05 lo implementó el otro integrante. Estos casos exploran lo
-que los casos CP-24 a CP-31 no cubren, que es lo que pasa cuando las reglas se
-combinan entre varias solicitudes en vez de dentro de una sola.
+Prueba cruzada: RF05 lo implementó el otro integrante. Estos casos exploran
+lo que los casos CP-24 a CP-31 no cubren, que es lo que pasa cuando las
+reglas se combinan entre varias solicitudes en vez de dentro de una sola.
 
-Los casos marcados `xfail(strict=True)` documentan defectos abiertos. Cuando se
-corrijan, el caso pasará y `strict` hará fallar la suite, lo que obliga a quitar
-la marca en vez de dejarla puesta para siempre.
+Los casos marcados `xfail(strict=True)` documentan defectos abiertos. Cuando
+se corrijan, el caso pasará y `strict` hará fallar la suite, lo que obliga a
+quitar la marca en vez de dejarla puesta para siempre.
 """
 
 from datetime import date, timedelta
@@ -46,7 +46,6 @@ def equipos_en_poder_de(rut: str) -> list[str]:
 
 
 @pytest.mark.reglas
-@pytest.mark.xfail(strict=True, reason="Defecto abierto: el tope solo cuenta lo ya entregado")
 def test_cp50_varias_solicitudes_no_pueden_superar_el_tope(catalogo_amplio, sesion_ana):
     """CP-50: RN01 limita a 2 equipos simultáneos, no a 2 por solicitud.
 
@@ -63,7 +62,6 @@ def test_cp50_varias_solicitudes_no_pueden_superar_el_tope(catalogo_amplio, sesi
 
 
 @pytest.mark.reglas
-@pytest.mark.xfail(strict=True, reason="Defecto abierto: las categorías solo se comparan dentro de una solicitud")
 def test_cp51_dos_solicitudes_no_pueden_dar_dos_equipos_de_la_misma_categoria(
     catalogo_amplio, sesion_ana
 ):
@@ -89,8 +87,8 @@ def test_cp51_dos_solicitudes_no_pueden_dar_dos_equipos_de_la_misma_categoria(
 def test_cp52_no_se_puede_pedir_para_fechas_ya_pasadas(catalogo_amplio, sesion_ana):
     """CP-52: una solicitud con devolución en el pasado nace ya vencida.
 
-    Además bloquea el equipo, así que inmoviliza una unidad por un préstamo que
-    nunca va a ocurrir.
+    Además bloquea el equipo, así que inmoviliza una unidad por un préstamo
+    que nunca va a ocurrir.
     """
     with pytest.raises(ErrorValidacion):
         solicitudes.crear_solicitud(

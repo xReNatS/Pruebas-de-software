@@ -86,8 +86,31 @@ def crear_solicitud(
         equipos.append(equipo)
 
     # RF05.3
-    if len(equipos) == 2 and reglas.CATEGORIAS_DEBEN_SER_DISTINTAS:
-        if equipos[0]["categoria"] == equipos[1]["categoria"]:
+    if reglas.CATEGORIAS_DEBEN_SER_DISTINTAS:
+        # Verificar categorias distintas entre los equipos del pedido actual y los ya comprometidos
+        equipos_actuales = {e["categoria"] for e in equipos}
+
+        # Obtener categorias de equipos ya comprometidos en solicitudes activas del mismo solicitante
+        solicitudes_activas = disponibilidad.solicitudes_activas()
+        equipos_comprometidos = set()
+        for solicitud in solicitudes_activas:
+            if solicitud.get("rut_solicitante") == sesion.identificador:
+                for codigo in solicitud.get("equipos", []):
+                    equipo = almacen.buscar("equipos", "codigo", codigo)
+                    if equipo:
+                        equipos_comprometidos.add(equipo["categoria"])
+
+        # Verificar que no haya solapamiento de categorias
+        if equipos_actuales & equipos_comprometidos:
+            # Encontrar la categoria que se repite para el mensaje de error
+            categoria_repetida = next(c for c in equipos_actuales if c in equipos_comprometidos)
+            raise ErrorReglaNegocio(
+                f"El solicitante ya tiene un equipo de la categoria '{categoria_repetida}' "
+                f"en su poder y no puede solicitar otro equipo de la misma categoria"
+            )
+
+        # Verificar que dentro de la misma solicitud no haya dos equipos de la misma categoria
+        if len(equipos) == 2 and len(equipos_actuales) < len(equipos):
             raise ErrorReglaNegocio(
                 f"Los dos equipos deben ser de categorias distintas "
                 f"(ambos son '{equipos[0]['categoria']}')"
@@ -115,7 +138,7 @@ def crear_solicitud(
         len(s.get("equipos", []))
         for s in almacen.leer("solicitudes")
         if s.get("rut_solicitante") == sesion.identificador
-        and s.get("estado") in estados.ESTADOS_EN_PODER
+        and s.get("estado") in estados.ESTADOS_ACTIVOS
     )
     if en_poder + len(codigos) > reglas.MAX_EQUIPOS_SIMULTANEOS:
         raise ErrorReglaNegocio(
