@@ -16,6 +16,56 @@ código y caso de prueba.
 - pytest para las pruebas.
 - python-dotenv para la configuración y sentry-sdk para el reporte de errores.
 
+## Atajos: `make` y `make.ps1`
+
+El proyecto trae un `Makefile` y un `make.ps1` con los mismos objetivos, así que
+no hace falta recordar comandos largos. En Windows se usa el script, que no
+requiere instalar nada. En Linux o macOS se usa `make`.
+
+| Objetivo | Qué hace |
+| --- | --- |
+| `instalar` | Crea el entorno virtual e instala las dependencias |
+| `correr` | Inicia la aplicación |
+| `probar` | Ejecuta toda la suite de pruebas |
+| `verificar` | Ejecuta la suite y muestra el recuento de casos por categoría |
+| `probar-funcional`, `probar-borde`, `probar-negativo`, `probar-reglas`, `probar-escenario` | Ejecuta solo esa categoría de casos |
+| `probar-pendientes` | Lista los casos que esperan la implementación de su requerimiento |
+| `evidencia` | Guarda la salida de las pruebas en `evidencias/` con la fecha |
+| `demo` | Regenera los datos de demostración |
+| `reiniciar` | Borra datos y logs, y vuelve a cargar la demostración |
+| `registro` | Muestra las últimas líneas del log de eventos |
+| `limpiar` | Borra cachés, logs y archivos temporales |
+
+Arranque completo en Windows:
+
+```powershell
+.\make.ps1 instalar
+.\make.ps1 probar
+.\make.ps1 correr
+```
+
+Lo mismo en Linux o macOS:
+
+```bash
+make instalar
+make probar
+make correr
+```
+
+Ejecutar `.\make.ps1` o `make` sin argumentos muestra la lista de objetivos y
+qué intérprete de Python se está usando.
+
+Si PowerShell bloquea el script por la política de ejecución, se destraba solo
+para la sesión actual:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+Los objetivos usan el entorno virtual en cuanto existe, sin que haga falta
+activarlo a mano. La instalación manual que sigue es equivalente y está por si
+alguien prefiere hacerlo paso a paso.
+
 ## Instalación
 
 ```bash
@@ -83,20 +133,11 @@ para comprobar que el sistema le impide pedir equipos nuevos.
 ## Ejecución
 
 ```bash
-python -m prestamos
+python main.py
 ```
 
-En Windows, si el comando no encuentra el paquete:
-
-```bash
-set PYTHONPATH=src && python -m prestamos
-```
-
-En Linux o macOS:
-
-```bash
-PYTHONPATH=src python -m prestamos
-```
+El archivo `main.py` de la raíz se encarga de la ruta de importación, así que
+funciona igual en Windows, Linux y macOS sin configurar `PYTHONPATH`.
 
 La aplicación pide correo y contraseña, y según el rol muestra el menú del
 solicitante o el del encargado. Un correo vacío en la pantalla de ingreso cierra
@@ -124,6 +165,9 @@ implementados: están escritos y sirven de contrato para quien los implemente.
 ## Estructura del proyecto
 
 ```
+main.py              punto de entrada, resuelve la ruta de importación
+Makefile             atajos para Linux y macOS
+make.ps1             los mismos atajos para Windows
 src/prestamos/
   almacen.py         lectura y escritura atómica de los JSON
   modelos.py         esquema de las cuatro entidades
@@ -136,6 +180,7 @@ src/prestamos/
   cli/               menús de línea de comando
 data/                archivos JSON de persistencia
 docs/                reglas, estados, supuestos, trazabilidad y estrategia
+evidencias/          salidas de ejecución de las pruebas, por fecha
 scripts/             carga de datos de demostración
 tests/               suite de pytest
 ```
