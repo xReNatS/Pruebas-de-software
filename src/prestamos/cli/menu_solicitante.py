@@ -7,7 +7,7 @@ from ..servicios import equipos as srv_equipos
 from ..servicios import prestamos as srv_prestamos
 from ..servicios import solicitudes as srv_solicitudes
 from ..sesion import Sesion
-from .comun import aviso, ejecutar, menu, pedir, tabla, titulo
+from .comun import ejecutar, ficha, menu, pedir, tabla, titulo
 
 OPCIONES = [
     ("buscar", "Buscar equipos disponibles (RF04)"),
@@ -44,8 +44,7 @@ def _despachar(sesion: Sesion, opcion: str) -> None:
         codigo = pedir("Codigo del equipo")
         resultado = ejecutar(lambda: srv_equipos.detalle_equipo(sesion, codigo), actor)
         if resultado is not None:
-            for clave, valor in resultado.items():
-                aviso(f"{clave}: {valor}")
+            ficha(resultado)
 
     elif opcion == "crear":
         codigos = [c for c in pedir("Codigos de equipo separados por coma").split(",") if c.strip()]
