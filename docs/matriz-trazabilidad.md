@@ -39,6 +39,7 @@ caso, ninguno de los tres puede declararse cerrado en el informe.
 | VAL01 | Un RUT con dígito verificador incorrecto o formato inválido es rechazado antes de tocar el disco | `validaciones.py` | CP-14, CP-15 | Aprobado |
 | INF01 | Todo evento relevante queda en el log con su actor, y un defecto inesperado se convierte en mensaje sin tumbar la aplicación | `registro.py`, `cli/comun.py` | CP-40, CP-41, CP-43 | Aprobado |
 | INF02 | Los errores previstos del negocio no se reportan a Sentry, y la suite nunca envía eventos al panel real | `registro.py`, `config.py` | CP-39, CP-42 | Aprobado |
+| INF03 | Un defecto real llega a Sentry con traza, variables locales, migas de pan y el commit que lo produjo | `registro.py` | Verificación manual, ver `evidencias/sentry/` | Aprobado |
 
 ## Cobertura por categoría exigida
 

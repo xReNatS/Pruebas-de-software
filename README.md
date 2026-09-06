@@ -211,6 +211,7 @@ tests/               suite de pytest
 - [Matriz de trazabilidad](docs/matriz-trazabilidad.md)
 - [Estrategia de pruebas](docs/estrategia-pruebas.md)
 - [Flujo de trabajo con Git y reparto del equipo](docs/flujo-git.md)
+- [Evidencia de la integración con Sentry](evidencias/sentry/README.md)
 
 ## Seguridad
 
