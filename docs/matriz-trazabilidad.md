@@ -4,8 +4,9 @@ Los identificadores son los mismos en el documento, el código, las pruebas y lo
 Issues. La columna Resultado se completa al ejecutar la suite y se actualiza en
 cada entrega parcial.
 
-Estado actual: RF01 a RF04 implementados. RF05 a RF11 tienen sus casos de
-prueba escritos y marcados como `xfail` a la espera de su implementación.
+Estado actual: RF01 a RF04 implementados, más la infraestructura de log de
+eventos e integración con Sentry. RF05 a RF11 tienen sus casos de prueba
+escritos y marcados como `xfail` a la espera de su implementación.
 
 **Nota sobre la cobertura parcial de RF02, RF03 y RF04.** Los casos CP-16 a
 CP-23 cubren el camino principal de cada requerimiento, pero varios criterios
@@ -36,14 +37,17 @@ caso, ninguno de los tres puede declararse cerrado en el informe.
 | RN12 | Toda solicitud activa bloquea sus equipos, incluida una que aún está por revisar | `disponibilidad.py` | CP-10, CP-11, CP-12, CP-13 | Aprobado |
 | RN15 | Las transiciones fuera de la tabla y las ejecutadas por un rol no autorizado fallan | `estados.py` | CP-06, CP-07, CP-08, CP-09 | Aprobado |
 | VAL01 | Un RUT con dígito verificador incorrecto o formato inválido es rechazado antes de tocar el disco | `validaciones.py` | CP-14, CP-15 | Aprobado |
+| INF01 | Todo evento relevante queda en el log con su actor, y un defecto inesperado se convierte en mensaje sin tumbar la aplicación | `registro.py`, `cli/comun.py` | CP-40, CP-41, CP-43 | Aprobado |
+| INF02 | Los errores previstos del negocio no se reportan a Sentry, y la suite nunca envía eventos al panel real | `registro.py`, `config.py` | CP-39, CP-42 | Aprobado |
+| INF03 | Un defecto real llega a Sentry con traza, variables locales, migas de pan y el commit que lo produjo | `registro.py` | Verificación manual, ver `evidencias/sentry/` | Aprobado |
 
 ## Cobertura por categoría exigida
 
 | Categoría | Mínimo pedido | Casos |
 | --- | --- | --- |
-| Funcionales | 5 | CP-01, CP-02, CP-06, CP-10, CP-12, CP-16, CP-19, CP-23, CP-24, CP-32 |
-| De borde | 4 | CP-04, CP-09, CP-14, CP-20, CP-27, CP-28, CP-36 |
-| Negativos o con entradas inválidas | 3 | CP-03, CP-05, CP-07, CP-08, CP-13, CP-15, CP-17, CP-18, CP-21, CP-22, CP-25, CP-33, CP-34 |
+| Funcionales | 5 | CP-01, CP-02, CP-06, CP-10, CP-12, CP-16, CP-19, CP-23, CP-24, CP-32, CP-40 |
+| De borde | 4 | CP-04, CP-09, CP-14, CP-20, CP-27, CP-28, CP-36, CP-43 |
+| Negativos o con entradas inválidas | 3 | CP-03, CP-05, CP-07, CP-08, CP-13, CP-15, CP-17, CP-18, CP-21, CP-22, CP-25, CP-33, CP-34, CP-39, CP-41, CP-42 |
 | Que combinan reglas | 2 | CP-11, CP-26, CP-29, CP-30, CP-31, CP-35, CP-37 |
 | Escenario completo | 1 | CP-38 |
 

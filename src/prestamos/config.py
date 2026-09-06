@@ -29,6 +29,20 @@ def directorio_logs() -> Path:
     return Path(ruta) if ruta else RAIZ_PROYECTO / "logs"
 
 
-SENTRY_DSN = os.environ.get("SENTRY_DSN", "").strip()
-SENTRY_ENTORNO = os.environ.get("SENTRY_ENTORNO", "desarrollo")
-NIVEL_LOG = os.environ.get("NIVEL_LOG", "INFO").upper()
+def sentry_dsn() -> str:
+    """DSN de Sentry, o cadena vacia si Sentry esta desactivado.
+
+    Es una funcion y no una constante por la misma razon que las rutas de
+    datos: si se leyera una sola vez al importar el modulo, las pruebas no
+    podrian desactivar Sentry con monkeypatch y terminarian enviando eventos
+    reales al panel del proyecto.
+    """
+    return os.environ.get("SENTRY_DSN", "").strip()
+
+
+def sentry_entorno() -> str:
+    return os.environ.get("SENTRY_ENTORNO", "desarrollo")
+
+
+def nivel_log() -> str:
+    return os.environ.get("NIVEL_LOG", "INFO").upper()
