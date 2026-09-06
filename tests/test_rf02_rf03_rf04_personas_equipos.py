@@ -3,9 +3,9 @@
 Responsable del diseno de estas pruebas: integrante B (prueba cruzada, ya que
 la implementacion de estos requerimientos corre por cuenta del integrante A).
 
-Cada prueba esta escrita como esqueleto ejecutable y marcada con xfail hasta
-que el servicio correspondiente exista. Al implementar el requerimiento se
-quita la marca y el caso debe pasar sin modificar el cuerpo de la prueba.
+Los tres requerimientos estan implementados, asi que ya no queda ningun caso
+marcado con xfail: todos se ejecutan de verdad. Ninguno de estos cuerpos se
+modifico al implementar, que era la condicion del contrato.
 """
 
 import pytest
@@ -13,9 +13,6 @@ import pytest
 from prestamos.errores import ErrorDuplicado, ErrorPermiso, ErrorValidacion
 from prestamos.servicios import equipos as srv_equipos
 from prestamos.servicios import personas as srv_personas
-
-pendiente = pytest.mark.xfail(raises=NotImplementedError, reason="RF03 y RF04 no implementados")
-
 
 @pytest.mark.funcional
 def test_cp16_encargado_registra_solicitante(datos_base, sesion_encargado):
@@ -44,7 +41,6 @@ def test_cp18_rut_duplicado_es_rechazado(datos_base, sesion_encargado):
         )
 
 
-@pendiente
 @pytest.mark.funcional
 def test_cp19_encargado_registra_equipo(datos_base, sesion_encargado):
     """CP-19: un equipo nuevo aparece en el catalogo como disponible."""
@@ -54,7 +50,6 @@ def test_cp19_encargado_registra_equipo(datos_base, sesion_encargado):
     assert creado["codigo"] == "PRO-001"
 
 
-@pendiente
 @pytest.mark.borde
 def test_cp20_dos_unidades_del_mismo_modelo(datos_base, sesion_encargado):
     """CP-20: dos unidades del mismo modelo conviven con codigos distintos."""
@@ -63,7 +58,6 @@ def test_cp20_dos_unidades_del_mismo_modelo(datos_base, sesion_encargado):
     assert len(encontrados) == 2
 
 
-@pendiente
 @pytest.mark.negativo
 def test_cp21_codigo_de_equipo_duplicado(datos_base, sesion_encargado):
     """CP-21: repetir un codigo levanta ErrorDuplicado."""
@@ -71,7 +65,6 @@ def test_cp21_codigo_de_equipo_duplicado(datos_base, sesion_encargado):
         srv_equipos.registrar_equipo(sesion_encargado, "LAP-001", "Otro notebook", "laptop")
 
 
-@pendiente
 @pytest.mark.negativo
 def test_cp22_categoria_vacia_es_rechazada(datos_base, sesion_encargado):
     """CP-22: la categoria es obligatoria porque de ella depende la regla de las dos categorias."""
@@ -79,7 +72,6 @@ def test_cp22_categoria_vacia_es_rechazada(datos_base, sesion_encargado):
         srv_equipos.registrar_equipo(sesion_encargado, "XXX-001", "Equipo raro", "")
 
 
-@pendiente
 @pytest.mark.funcional
 def test_cp23_solicitante_solo_ve_equipos_disponibles(
     datos_base, sesion_ana, crear_solicitud_directa

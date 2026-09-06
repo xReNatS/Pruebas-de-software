@@ -6,7 +6,7 @@ from ..servicios import personas as srv_personas
 from ..servicios import prestamos as srv_prestamos
 from ..servicios import solicitudes as srv_solicitudes
 from ..sesion import Sesion
-from .comun import aviso, ejecutar, menu, pedir, pedir_secreto, tabla, titulo
+from .comun import aviso, ejecutar, ficha, menu, pedir, pedir_secreto, tabla, titulo
 
 OPCIONES = [
     ("solicitante", "Registrar solicitante (RF02)"),
@@ -14,7 +14,9 @@ OPCIONES = [
     ("personas", "Ver personas autorizadas (RF02)"),
     ("estado", "Cambiar estado de un solicitante (RF02)"),
     ("equipo", "Registrar equipo (RF03)"),
+    ("retirar", "Retirar o reincorporar un equipo (RF03)"),
     ("catalogo", "Ver catalogo de equipos (RF04)"),
+    ("detalle", "Ver detalle de un equipo (RF04)"),
     ("solicitudes", "Ver y filtrar solicitudes (RF06)"),
     ("aprobar", "Aprobar solicitud (RF07)"),
     ("rechazar", "Rechazar solicitud (RF07)"),
@@ -77,8 +79,18 @@ def _despachar(sesion: Sesion, opcion: str) -> None:
             actor,
         )
 
+    elif opcion == "retirar":
+        codigo = pedir("Codigo del equipo")
+        accion = pedir("Accion (retirar / reincorporar)")
+        if accion.lower().startswith("rei"):
+            ejecutar(lambda: srv_equipos.volver_a_servicio(sesion, codigo), actor)
+        else:
+            motivo = pedir("Motivo del retiro")
+            ejecutar(lambda: srv_equipos.marcar_fuera_de_servicio(sesion, codigo, motivo), actor)
+
     elif opcion == "catalogo":
-        resultado = ejecutar(lambda: srv_equipos.buscar_equipos(sesion, ""), actor)
+        texto = pedir("Texto a buscar (Enter para ver todos)", obligatorio=False)
+        resultado = ejecutar(lambda: srv_equipos.buscar_equipos(sesion, texto), actor)
         if resultado is not None:
             tabla(
                 resultado,
@@ -89,6 +101,12 @@ def _despachar(sesion: Sesion, opcion: str) -> None:
                     ("estado", "ESTADO"),
                 ],
             )
+
+    elif opcion == "detalle":
+        codigo = pedir("Codigo del equipo")
+        resultado = ejecutar(lambda: srv_equipos.detalle_equipo(sesion, codigo), actor)
+        if resultado is not None:
+            ficha(resultado)
 
     elif opcion == "solicitudes":
         filtro = pedir("Filtro (todas / vigentes / futuras / atrasadas)", obligatorio=False)

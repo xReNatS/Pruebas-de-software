@@ -67,6 +67,19 @@ def ejecutar(accion, actor: str = "sistema"):
     return None
 
 
+def ficha(registro: dict) -> None:
+    """Imprime un registro campo por campo, omitiendo los vacios.
+
+    Un campo en None suele significar 'no aplica', por ejemplo el motivo de no
+    disponibilidad de un equipo que si esta libre. Mostrarlo como 'None'
+    confunde mas de lo que informa.
+    """
+    for clave, valor in registro.items():
+        if valor in (None, "", [], {}):
+            continue
+        print(f"  {clave.replace('_', ' ')}: {valor}")
+
+
 def tabla(filas: list[dict], columnas: list[tuple[str, str]]) -> None:
     """Imprime una tabla simple. columnas es [(clave, encabezado), ...]."""
     if not filas:
