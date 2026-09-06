@@ -4,14 +4,21 @@ Los identificadores son los mismos en el documento, el código, las pruebas y lo
 Issues. La columna Resultado se completa al ejecutar la suite y se actualiza en
 cada entrega parcial.
 
-Estado a la fecha de creación de la base del proyecto: RF01 implementado y
-verificado. El resto tiene los casos de prueba escritos y marcados como `xfail`
-a la espera de su implementación.
+Estado actual: RF01 y RF02 implementados. El resto tiene los casos de prueba
+escritos y marcados como `xfail` a la espera de su implementación.
+
+**Nota sobre la cobertura parcial de RF02.** Los casos automatizados CP-16,
+CP-17 y CP-18 cubren los criterios RF02.1 y RF02.2. Los criterios RF02.3
+(dígito verificador), RF02.4 (contraseña como hash), RF02.5 (correo único entre
+las dos colecciones) y RF02.6 (evento de cambio de estado) se comprobaron de
+forma manual al implementar, y su caso automatizado le corresponde al
+integrante que hace la prueba cruzada de RF02, según el Issue #14. Mientras eso
+no ocurra, RF02 no puede declararse cerrado en el informe.
 
 | ID | Criterio de aceptación | Evidencia de implementación | Casos de prueba | Resultado |
 | --- | --- | --- | --- | --- |
 | RF01 | Con credenciales válidas se obtiene una sesión con el rol correcto; con credenciales inválidas se levanta `ErrorAutenticacion` con un mensaje que no revela si el correo existe | `servicios/autenticacion.py` | CP-01, CP-02, CP-03, CP-04, CP-05 | Aprobado |
-| RF02 | Solo un encargado registra personas; RUT y correo son únicos; la contraseña se guarda como hash | `servicios/personas.py` | CP-16, CP-17, CP-18 | Pendiente |
+| RF02 | Solo un encargado registra personas; RUT y correo son únicos; la contraseña se guarda como hash | `servicios/personas.py` | CP-16, CP-17, CP-18 | Aprobado (cobertura parcial, ver nota) |
 | RF03 | Solo un encargado registra equipos; el código es único; dos unidades del mismo modelo conviven con códigos distintos | `servicios/equipos.py` | CP-19, CP-20, CP-21, CP-22 | Pendiente |
 | RF04 | El solicitante ve solo equipos disponibles; el encargado ve todos con su estado calculado; un código inexistente levanta `ErrorNoEncontrado` | `servicios/equipos.py` | CP-23, CP-13 | Pendiente |
 | RF05 | La solicitud nace en `por_revisar` con 1 o 2 equipos de categorías distintas, dentro del máximo de 7 días y sobre equipos disponibles | `servicios/solicitudes.py` | CP-24, CP-25, CP-26, CP-27, CP-28, CP-29, CP-30, CP-31 | Pendiente |

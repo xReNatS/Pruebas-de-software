@@ -14,10 +14,9 @@ from prestamos.errores import ErrorDuplicado, ErrorPermiso, ErrorValidacion
 from prestamos.servicios import equipos as srv_equipos
 from prestamos.servicios import personas as srv_personas
 
-pendiente = pytest.mark.xfail(raises=NotImplementedError, reason="RF02/RF03/RF04 no implementados")
+pendiente = pytest.mark.xfail(raises=NotImplementedError, reason="RF03 y RF04 no implementados")
 
 
-@pendiente
 @pytest.mark.funcional
 def test_cp16_encargado_registra_solicitante(datos_base, sesion_encargado):
     """CP-16: el encargado registra un solicitante y queda en el JSON."""
@@ -27,7 +26,6 @@ def test_cp16_encargado_registra_solicitante(datos_base, sesion_encargado):
     assert creado["rut"] == "20111222-2"
 
 
-@pendiente
 @pytest.mark.negativo
 def test_cp17_solicitante_no_puede_registrar_personas(datos_base, sesion_ana):
     """CP-17: RF02 esta reservado al encargado."""
@@ -37,7 +35,6 @@ def test_cp17_solicitante_no_puede_registrar_personas(datos_base, sesion_ana):
         )
 
 
-@pendiente
 @pytest.mark.negativo
 def test_cp18_rut_duplicado_es_rechazado(datos_base, sesion_encargado):
     """CP-18: no se puede registrar dos veces el mismo RUT."""
