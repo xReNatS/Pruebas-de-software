@@ -5,3 +5,5 @@ venv/
 .env
 *.log
 .pytest_cache/
+logs/
+data/*.bak

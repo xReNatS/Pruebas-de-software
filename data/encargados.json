@@ -1,0 +1,16 @@
+[
+  {
+    "id": "ENC-0001",
+    "nombre": "Camila Rojas",
+    "correo": "camila.rojas@lab.cl",
+    "contrasena_hash": "pbkdf2_sha256$120000$65175bca859041862aca5467b9729217$b87d0a278ead8d8fbee42b6db4320a0165e885dd5b480a48b378960e969d5076",
+    "creado_en": "2026-09-05T20:14:18-04:00"
+  },
+  {
+    "id": "ENC-0002",
+    "nombre": "Diego Fuentes",
+    "correo": "diego.fuentes@lab.cl",
+    "contrasena_hash": "pbkdf2_sha256$120000$fccfdfb0e629ba80143d09268f75d81c$f9082d0b6365c209a6e65a48c182c80934fcfd09e322140ec206399b31c7492e",
+    "creado_en": "2026-09-05T20:14:18-04:00"
+  }
+]

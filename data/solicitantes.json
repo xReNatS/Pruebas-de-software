@@ -1,0 +1,34 @@
+[
+  {
+    "rut": "12345678-5",
+    "nombre": "Ana Perez",
+    "correo": "ana.perez@alumnos.cl",
+    "contrasena_hash": "pbkdf2_sha256$120000$31a20195476530e9a94521cde4a68092$763b6d707b0fa87d2be2b817477f1fbdb1c997d10f08e271dffc99a83f24c64f",
+    "estado": "al_dia",
+    "creado_en": "2026-09-05T20:14:18-04:00"
+  },
+  {
+    "rut": "17890123-0",
+    "nombre": "Bruno Silva",
+    "correo": "bruno.silva@alumnos.cl",
+    "contrasena_hash": "pbkdf2_sha256$120000$2347bb99d74a818e1ec2e68e8c949e88$0f88c1bf23253363a8fbadfb4c17ec96a93efde9fbe9d6a12d7c171cab580bdb",
+    "estado": "al_dia",
+    "creado_en": "2026-09-05T20:14:18-04:00"
+  },
+  {
+    "rut": "9876543-3",
+    "nombre": "Carla Munoz",
+    "correo": "carla.munoz@profes.cl",
+    "contrasena_hash": "pbkdf2_sha256$120000$7f4794776c94564496214becfcf02f21$00f614cc160f63f4e6a546100e833021d4ec007ca4533160f4dd8792aef27eee",
+    "estado": "al_dia",
+    "creado_en": "2026-09-05T20:14:18-04:00"
+  },
+  {
+    "rut": "20111222-2",
+    "nombre": "Diana Torres",
+    "correo": "diana.torres@alumnos.cl",
+    "contrasena_hash": "pbkdf2_sha256$120000$22348533d4c35c305f833bf19bf915e0$02283d79b91a7954332f11f0f037bc99c1ad2f7f600916f99ed440607cb4cc20",
+    "estado": "pendiente",
+    "creado_en": "2026-09-05T20:14:18-04:00"
+  }
+]
