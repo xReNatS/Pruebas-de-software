@@ -139,3 +139,26 @@ de no prometer fechas de liberación que el sistema no puede garantizar.
 al revisar la corrección de los defectos \#27 y \#28 se ensayó el escenario de
 dos solicitudes con un mes de diferencia, y el rechazo dejó en evidencia que la
 condición de fechas nunca había sido trasladada a una regla.
+
+## A14. Solicitudes para fechas ya pasadas
+
+El enunciado fija la duración máxima de un préstamo y guarda silencio sobre la
+anticipación, tanto hacia el futuro (A10) como hacia el pasado.
+
+**Decisión.** La fecha de retiro no puede ser anterior a hoy. El retiro el mismo
+día sí se acepta, porque es el caso normal de quien pasa a buscar un equipo en
+el momento.
+
+**Por qué.** Una solicitud con fechas vencidas nace atrasada. Como toda
+solicitud activa bloquea sus equipos (A05), inmoviliza una unidad por un
+préstamo que nunca va a ocurrir, y desde que existe RF06 además aparece en el
+listado de atrasadas que el encargado usa para reclamar. Un equipo inmovilizado
+se nota; un atraso falso en el listado de cobranza se cree.
+
+**Cómo se detectó.** En la prueba cruzada de RF05, probando el escenario que
+nadie escribiría a propósito. Quedó registrado como el defecto #29 y su caso es
+CP-52.
+
+**Riesgo que queda.** No se puede registrar a posteriori un préstamo que ocurrió
+fuera del sistema. Si el laboratorio necesitara regularizar préstamos hechos por
+fuera, haría falta una operación aparte para el encargado, que hoy no existe.
