@@ -39,20 +39,85 @@ Transiciones automaticas (ejecutadas por el sistema, no por una persona):
 
 from datetime import date
 
+from .. import almacen, modelos, registro, reglas
+from .. import estados
+from ..errores import ErrorPermiso
 from ..sesion import Sesion
+from . import personas
 
 
 def registrar_entrega(sesion: Sesion, identificador: str) -> dict:
-    """Encargado entrega fisicamente los equipos: aprobada -> en_prestamo."""
-    raise NotImplementedError("RF08: registrar entrega")
+    """RF08.1: solo un encargado entrega fisicamente los equipos.
 
+    La solicitud debe estar en 'aprobada' y pasa a 'en_prestamo'.
+    El encargado toma posesión de los equipos y el solicitante ya
+    no puede cancelar por su cuenta.
+    """
+    if not sesion.es_encargado:
+        raise ErrorPermiso(
+            f"Esta operacion requiere el rol 'encargado' y la sesion es '{sesion.rol}'"
+        )
 
-def declarar_devolucion(sesion: Sesion, identificador: str) -> dict:
-    raise NotImplementedError("RF10: declarar devolucion (solicitante)")
+    solicitud = almacen.obtener("solicitudes", "id", identificador)
+    nuevo_estado = estados.transicionar(solicitud["estado"], "entregar", sesion.rol)
+    modelos.registrar_cambio(solicitud, nuevo_estado, sesion.identificador)
+    almacen.reemplazar("solicitudes", "id", identificador, solicitud)
+    registro.evento(
+        "entrega_registrada",
+        f"Solicitud {identificador} entregada al solicitante",
+        actor=sesion.identificador,
+    )
+    return solicitud
 
 
 def confirmar_devolucion(sesion: Sesion, identificador: str, observacion: str = "") -> dict:
-    raise NotImplementedError("RF08: confirmar devolucion (encargado)")
+    """RF08: confirma la recepcion de los equipos y la solicitud pasa a 'concluida'.
+
+    Se puede concluir desde 'en_prestamo', 'periodo_gracia' o
+    'atrasada' (RF08.2). Al cerrar, los equipos vuelven a estar
+    disponibles (RF08.4). El actor encargado queda registrado en el log
+    (RF08.5).
+    """
+    if not sesion.es_encargado:
+        raise ErrorPermiso(
+            f"Esta operacion requiere el rol 'encargado' y la sesion es '{sesion.rol}'"
+        )
+
+    solicitud = almacen.obtener("solicitudes", "id", identificador)
+    venia_atrasada = solicitud["estado"] == estados.ATRASADA
+
+    nuevo_estado = estados.transicionar(solicitud["estado"], "concluir", sesion.rol)
+    modelos.registrar_cambio(solicitud, nuevo_estado, sesion.identificador, observacion)
+    almacen.reemplazar("solicitudes", "id", identificador, solicitud)
+
+    observacion_limpia = (observacion or "").strip()
+    registro.evento(
+        "devolucion_confirmada",
+        f"Solicitud {identificador} concluida por el encargado"
+        + (f". Observacion: {observacion_limpia}" if observacion_limpia else ""),
+        actor=sesion.identificador,
+    )
+
+    # RF08.4 / RN11: devolver no borra el atraso. Quien no devolvio a tiempo
+    # queda en estado 'pendiente' y no puede pedir de nuevo hasta que un
+    # encargado lo reactive a mano. Lo marca el sistema y no el encargado que
+    # recibe el equipo, porque no es una decision suya sino la regla.
+    if venia_atrasada:
+        personas.marcar_estado_por_sistema(
+            solicitud["rut_solicitante"], reglas.SOLICITANTE_PENDIENTE
+        )
+
+    return solicitud
+
+
+def declarar_devolucion(sesion: Sesion, identificador: str) -> dict:
+    """RF10: el dueno declara que devolvera los equipos.
+
+    RF10 está pendiente: solo marca devolucion_declarada_en con la fecha
+    actual; no libera el equipo ni cambia el estado (RF10.3). La solicitud
+    sigue activa hasta que RF08 confirme.
+    """
+    raise NotImplementedError("RF10: declarar devolucion")
 
 
 def renovar_prestamo(sesion: Sesion, identificador: str, dias: int) -> dict:

@@ -68,6 +68,7 @@ REQUERIMIENTO = {
     **dict.fromkeys(["CP-56", "CP-57", "CP-58", "CP-59"], "RF09"),
     **dict.fromkeys(["CP-60", "CP-61"], "RF07"),
     "CP-62": "RF06",
+    **dict.fromkeys(["CP-63", "CP-64", "CP-65", "CP-66", "CP-67", "CP-68"], "RF08"),
 }
 
 # Issue donde esta registrado cada defecto abierto. Une el caso que falla con
@@ -90,6 +91,7 @@ PRECONDICIONES = {
     "crear_solicitud_directa": "Se insertan solicitudes en un estado dado sin pasar por los servicios",
     "capsys": "Se captura la salida por pantalla",
     "solicitudes_sembradas": "Una solicitud por cada estado que los filtros deben distinguir",
+    "con_solicitud": "Una solicitud de Ana sobre LAP-001, en el estado que el caso necesite",
 }
 
 

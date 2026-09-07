@@ -4,10 +4,10 @@ Los identificadores son los mismos en el documento, el código, las pruebas y lo
 Issues. La columna Resultado se completa al ejecutar la suite y se actualiza en
 cada entrega parcial.
 
-Estado actual: RF01 a RF07 y RF09 implementados y verificados, más la
-infraestructura de log de eventos e integración con Sentry. RF08, RF10 y RF11
-tienen sus casos de prueba escritos y marcados como `xfail` a la espera de su
-implementación.
+Estado actual: RF01 a RF09 implementados y verificados, más la infraestructura
+de log de eventos e integración con Sentry. Quedan RF10, RF11 y las
+transiciones automáticas por fecha, cuyos casos están escritos y marcados como
+`xfail` a la espera de su implementación.
 
 La prueba cruzada de RF05 encontró tres defectos. Los dos de severidad alta,
 #27 y #28, ya están corregidos y reejecutados: los casos CP-50 y CP-51 pasan.
@@ -37,7 +37,7 @@ caso, ninguno de los tres puede declararse cerrado en el informe.
 | RF05 | La solicitud nace en `por_revisar` con 1 o 2 equipos de categorías distintas, dentro del máximo de 7 días y sobre equipos disponibles | `servicios/solicitudes.py` | CP-24 a CP-31, CP-53, CP-54, CP-55 | Aprobado. Queda abierto #29, de severidad media |
 | RF06 | El solicitante ve solo sus solicitudes; el encargado filtra por vigentes, futuras y atrasadas, y el atraso se calcula por fecha | `servicios/solicitudes.py` | CP-32, CP-62 | Aprobado |
 | RF07 | Solo el encargado aprueba o rechaza y solo desde `por_revisar`; el rechazo exige motivo; al aprobar se revalida la disponibilidad | `servicios/solicitudes.py` | CP-32, CP-33, CP-60, CP-61 | Aprobado |
-| RF08 | Solo el encargado registra entregas y confirma devoluciones; al concluir desde `atrasada` el solicitante queda `pendiente`; la unidad se libera | `servicios/prestamos.py` | CP-35, CP-37, CP-38 | Pendiente |
+| RF08 | Solo el encargado registra entregas y confirma devoluciones; al concluir desde `atrasada` el solicitante queda `pendiente`; la unidad se libera | `servicios/prestamos.py` | CP-63 a CP-68 | Aprobado |
 | RF09 | El solicitante cancela solo sus solicitudes, y solo en `por_revisar` o `aprobada`; el encargado también puede, con motivo obligatorio; los equipos se liberan de inmediato | `servicios/solicitudes.py` | CP-34, CP-12, CP-56 a CP-59 | Aprobado |
 | RF10 | El solicitante declara la devolución, incluso antes del vencimiento, y esa declaración por sí sola no libera la unidad | `servicios/prestamos.py` | CP-35, CP-38 | Pendiente |
 | RF11 | Se renueva solo desde `periodo_gracia`, una única vez y por hasta 7 días | `servicios/prestamos.py` | CP-36 | Pendiente |

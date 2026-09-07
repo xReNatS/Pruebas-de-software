@@ -11,16 +11,16 @@ El resultado obtenido y el estado salen de ejecutar la suite, no de lo que
 alguien recuerde. La versión para la planilla del Aula está en
 `evidencias/planilla-casos-de-prueba.csv`, con punto y coma como separador.
 
-Total: **62 casos**. Aprobados: 57. Con defecto abierto: 1. A la espera de su requerimiento: 4. Fallidos: 0.
+Total: **68 casos**. Aprobados: 63. Con defecto abierto: 1. A la espera de su requerimiento: 4. Fallidos: 0.
 
 ## Cobertura por categoría
 
 | Categoría | Mínimo exigido | Casos |
 | --- | --- | --- |
-| Funcional | 5 | 16 |
+| Funcional | 5 | 19 |
 | Borde | 4 | 11 |
-| Negativo | 3 | 22 |
-| Combina reglas | 2 | 12 |
+| Negativo | 3 | 24 |
+| Combina reglas | 2 | 13 |
 | Escenario completo | 1 | 1 |
 
 Un caso puede pertenecer a más de una categoría, así que la suma supera el
@@ -92,5 +92,11 @@ total de casos.
 | CP-60 | RF07 | Combina reglas | Una solicitud por cada estado que los filtros deben distinguir. Sesión iniciada como encargado | python -m pytest tests/test_rf06_rf07_rf09_cruzadas.py::test_cp60_el_motivo_al_aprobar_no_culpa_a_la_propia_solicitud | CP-60 (RF07.3): el mensaje debe nombrar a la solicitud que estorba. | Coincide con el resultado esperado | Aprobado | tests/test_rf06_rf07_rf09_cruzadas.py:104 y evidencias/ejecucion-suite.txt |
 | CP-61 | RF07 | Funcional | Una solicitud por cada estado que los filtros deben distinguir. Sesión iniciada como encargado | python -m pytest tests/test_rf06_rf07_rf09_cruzadas.py::test_cp61_se_aprueba_aunque_la_propia_solicitud_bloquee_su_equipo | CP-61 (RF07.3): la revalidación no puede bloquearse a sí misma. | Coincide con el resultado esperado | Aprobado | tests/test_rf06_rf07_rf09_cruzadas.py:127 y evidencias/ejecucion-suite.txt |
 | CP-62 | RF06 | Negativo | Una solicitud por cada estado que los filtros deben distinguir. Sesión iniciada como la solicitante Ana Pérez | python -m pytest tests/test_rf06_rf07_rf09_cruzadas.py::test_cp62_un_solicitante_no_ve_lo_ajeno_pida_el_filtro_que_pida | CP-62 (RF06.1): cambiar el nombre del filtro no es una vía de escape. | Coincide con el resultado esperado | Aprobado | tests/test_rf06_rf07_rf09_cruzadas.py:142 y evidencias/ejecucion-suite.txt |
+| CP-63 | RF08 | Negativo | Una solicitud de Ana sobre LAP-001, en el estado que el caso necesite. Sesión iniciada como la solicitante Ana Pérez | python -m pytest tests/test_rf08_cruzadas.py::test_cp63_solo_el_encargado_entrega_y_confirma | CP-63 (RF08.1): el movimiento físico lo registra quien lo presencia. | Coincide con el resultado esperado | Aprobado | tests/test_rf08_cruzadas.py:41 y evidencias/ejecucion-suite.txt |
+| CP-64 | RF08 | Funcional | Una solicitud de Ana sobre LAP-001, en el estado que el caso necesite. Sesión iniciada como encargado | python -m pytest tests/test_rf08_cruzadas.py::test_cp64_la_entrega_mueve_de_aprobada_a_en_prestamo | CP-64 (RF08.2): el camino normal de la entrega. | Coincide con el resultado esperado | Aprobado | tests/test_rf08_cruzadas.py:52 y evidencias/ejecucion-suite.txt |
+| CP-65 | RF08 | Negativo | Una solicitud de Ana sobre LAP-001, en el estado que el caso necesite. Sesión iniciada como encargado | python -m pytest tests/test_rf08_cruzadas.py::test_cp65_no_se_entrega_desde_otro_estado (4 combinaciones de datos) | CP-65 (RF08.2): entregar dos veces, o antes de aprobar, no es posible. | Coincide con el resultado esperado | Aprobado | tests/test_rf08_cruzadas.py:66 y evidencias/ejecucion-suite.txt |
+| CP-66 | RF08 | Funcional | Una solicitud de Ana sobre LAP-001, en el estado que el caso necesite. Sesión iniciada como encargado | python -m pytest tests/test_rf08_cruzadas.py::test_cp66_se_concluye_desde_los_tres_estados_con_el_equipo_afuera (3 combinaciones de datos) | CP-66 (RF08.3, RF08.5): concluir cierra la solicitud y libera la unidad. | Coincide con el resultado esperado | Aprobado | tests/test_rf08_cruzadas.py:78 y evidencias/ejecucion-suite.txt |
+| CP-67 | RF08 | Combina reglas | Una solicitud de Ana sobre LAP-001, en el estado que el caso necesite. Sesión iniciada como encargado | python -m pytest tests/test_rf08_cruzadas.py::test_cp67_devolver_tarde_no_borra_el_atraso | CP-67 (RF08.4, RN11): quien se atrasó queda `pendiente` aunque devuelva. | Coincide con el resultado esperado | Aprobado | tests/test_rf08_cruzadas.py:91 y evidencias/ejecucion-suite.txt |
+| CP-68 | RF08 | Funcional | Una solicitud de Ana sobre LAP-001, en el estado que el caso necesite. Sesión iniciada como encargado | python -m pytest tests/test_rf08_cruzadas.py::test_cp68_devolver_a_tiempo_no_penaliza | CP-68 (RF08.4): la contracara de CP-67, para que la regla no sea un castigo ciego. | Coincide con el resultado esperado | Aprobado | tests/test_rf08_cruzadas.py:112 y evidencias/ejecucion-suite.txt |
 
 Evidencia de la ejecución: `evidencias/ejecucion-suite.txt`.
