@@ -68,6 +68,20 @@ def crear_solicitud(
 
     # RF05.6
     validaciones.rango_fechas(fecha_retiro, fecha_devolucion)
+
+    # No se reserva para un pasado que ya ocurrio. Una solicitud con fechas
+    # vencidas nace atrasada, inmoviliza el equipo por un prestamo que nunca
+    # va a suceder, y aparece en el listado de atrasadas del encargado como si
+    # hubiera algo que reclamar. Se acepta el retiro de hoy mismo, que es el
+    # caso normal de quien pasa a buscar el equipo en el momento. Hacia el
+    # futuro no hay limite (supuesto A10).
+    hoy = date.today()
+    if fecha_retiro < hoy:
+        raise ErrorValidacion(
+            f"La fecha de retiro no puede ser anterior a hoy "
+            f"(se pidio {fecha_retiro.isoformat()} y hoy es {hoy.isoformat()})"
+        )
+
     duracion = (fecha_devolucion - fecha_retiro).days
     if duracion > reglas.DIAS_MAX_PRESTAMO:
         raise ErrorValidacion(

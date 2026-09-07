@@ -9,11 +9,9 @@ de log de eventos e integración con Sentry. Quedan RF10, RF11 y las
 transiciones automáticas por fecha, cuyos casos están escritos y marcados como
 `xfail` a la espera de su implementación.
 
-La prueba cruzada de RF05 encontró tres defectos. Los dos de severidad alta,
-#27 y #28, ya están corregidos y reejecutados: los casos CP-50 y CP-51 pasan.
-Queda abierto #29, de severidad media, con su caso CP-52 marcado
-`xfail(strict=True)`; cuando se corrija, el caso pasará y `strict` obligará a
-quitar la marca.
+La prueba cruzada de RF05 encontró tres defectos, #27, #28 y #29. **Los tres
+están corregidos y reejecutados**, y sus casos CP-50, CP-51 y CP-52 pasan. No
+queda ningún defecto abierto en el proyecto.
 
 **Nota sobre la cobertura parcial de RF02, RF03 y RF04.** Los casos CP-16 a
 CP-23 cubren el camino principal de cada requerimiento, pero varios criterios
@@ -34,7 +32,7 @@ caso, ninguno de los tres puede declararse cerrado en el informe.
 | RF02 | Solo un encargado registra personas; RUT y correo son únicos; la contraseña se guarda como hash | `servicios/personas.py` | CP-16, CP-17, CP-18 | Aprobado (cobertura parcial, ver nota) |
 | RF03 | Solo un encargado registra equipos; el código es único; dos unidades del mismo modelo conviven con códigos distintos | `servicios/equipos.py` | CP-19, CP-20, CP-21, CP-22 | Aprobado (cobertura parcial, ver nota) |
 | RF04 | El solicitante ve solo equipos disponibles; el encargado ve todos con su estado calculado; un código inexistente levanta `ErrorNoEncontrado` | `servicios/equipos.py` | CP-23, CP-13 | Aprobado (cobertura parcial, ver nota) |
-| RF05 | La solicitud nace en `por_revisar` con 1 o 2 equipos de categorías distintas, dentro del máximo de 7 días y sobre equipos disponibles | `servicios/solicitudes.py` | CP-24 a CP-31, CP-53, CP-54, CP-55 | Aprobado. Queda abierto #29, de severidad media |
+| RF05 | La solicitud nace en `por_revisar` con 1 o 2 equipos de categorías distintas, dentro del máximo de 7 días, sobre equipos disponibles y para fechas no pasadas | `servicios/solicitudes.py` | CP-24 a CP-31, CP-52 a CP-55 | Aprobado |
 | RF06 | El solicitante ve solo sus solicitudes; el encargado filtra por vigentes, futuras y atrasadas, y el atraso se calcula por fecha | `servicios/solicitudes.py` | CP-32, CP-62 | Aprobado |
 | RF07 | Solo el encargado aprueba o rechaza y solo desde `por_revisar`; el rechazo exige motivo; al aprobar se revalida la disponibilidad | `servicios/solicitudes.py` | CP-32, CP-33, CP-60, CP-61 | Aprobado |
 | RF08 | Solo el encargado registra entregas y confirma devoluciones; al concluir desde `atrasada` el solicitante queda `pendiente`; la unidad se libera | `servicios/prestamos.py` | CP-63 a CP-68 | Aprobado |

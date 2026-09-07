@@ -4,9 +4,11 @@ Prueba cruzada: RF05 lo implementó el otro integrante. Estos casos exploran
 lo que los casos CP-24 a CP-31 no cubren, que es lo que pasa cuando las
 reglas se combinan entre varias solicitudes en vez de dentro de una sola.
 
-Los casos marcados `xfail(strict=True)` documentan defectos abiertos. Cuando
-se corrijan, el caso pasará y `strict` hará fallar la suite, lo que obliga a
-quitar la marca en vez de dejarla puesta para siempre.
+Los tres defectos que estos casos destaparon, #27, #28 y #29, ya están
+corregidos, así que ningún caso queda marcado. Mientras estuvieron abiertos, la
+marca era `xfail(strict=True)`: al corregirse el defecto el caso pasa y `strict`
+hace fallar la suite, lo que obliga a retirar la marca en vez de dejarla puesta
+para siempre.
 """
 
 from datetime import date, timedelta
@@ -83,7 +85,6 @@ def test_cp51_dos_solicitudes_no_pueden_dar_dos_equipos_de_la_misma_categoria(
 
 
 @pytest.mark.negativo
-@pytest.mark.xfail(strict=True, reason="Defecto abierto: no se valida que las fechas sean futuras")
 def test_cp52_no_se_puede_pedir_para_fechas_ya_pasadas(catalogo_amplio, sesion_ana):
     """CP-52: una solicitud con devolución en el pasado nace ya vencida.
 
