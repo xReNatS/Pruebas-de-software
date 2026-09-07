@@ -37,11 +37,10 @@ Transiciones automaticas (ejecutadas por el sistema, no por una persona):
   aprobada       -> cancelada       si no se retira en reglas.DIAS_PARA_RETIRO
 """
 
-from datetime import date
+from datetime import date, timedelta
 
-from .. import almacen, modelos, registro, reglas
-from .. import estados
-from ..errores import ErrorPermiso
+from .. import almacen, estados, modelos, registro, reglas
+from ..errores import ErrorPermiso, ErrorReglaNegocio, ErrorValidacion
 from ..sesion import Sesion
 from . import personas
 
@@ -111,23 +110,115 @@ def confirmar_devolucion(sesion: Sesion, identificador: str, observacion: str = 
 
 
 def declarar_devolucion(sesion: Sesion, identificador: str) -> dict:
-    """RF10: el dueno declara que devolvera los equipos.
+    """RF10: el dueno declara la devolucion de los equipos.
 
-    RF10 está pendiente: solo marca devolucion_declarada_en con la fecha
-    actual; no libera el equipo ni cambia el estado (RF10.3). La solicitud
-    sigue activa hasta que RF08 confirme.
+    RF10.1: solo el dueño. RF10.2: se permite anticipada. RF10.3: no libera
+    el equipo ni cambia el estado; solo marca devolucion_declarada_en.
     """
-    raise NotImplementedError("RF10: declarar devolucion")
+    solicitud = almacen.obtener("solicitudes", "id", identificador)
+
+    if solicitud.get("rut_solicitante") != sesion.identificador:
+        raise ErrorPermiso("Solo puede declarar la devolucion de sus propias solicitudes")
+
+    fecha_actual = date.today().isoformat()
+    solicitud["devolucion_declarada_en"] = fecha_actual
+    modelos.registrar_cambio(solicitud, solicitud["estado"], sesion.identificador)
+    almacen.reemplazar("solicitudes", "id", identificador, solicitud)
+    registro.evento(
+        "devolucion_declarada",
+        f"Solicitud {identificador} con devolucion declarada para {fecha_actual}",
+        actor=sesion.identificador,
+    )
+    return solicitud
 
 
 def renovar_prestamo(sesion: Sesion, identificador: str, dias: int) -> dict:
-    raise NotImplementedError("RF11: renovar prestamo")
+    """RF11: renueva un prestamo en periodo de gracia.
+
+    RF11.1: solo desde 'periodo_gracia'. RF11.2: maximo
+    reglas.MAX_RENOVACIONES veces (1) y hasta reglas.DIAS_MAX_RENOVACION dias.
+    RF11.3: vuelve a 'en_prestamo' con nueva fecha de devolucion y contador
+    de renovaciones incrementado.
+    """
+    solicitud = almacen.obtener("solicitudes", "id", identificador)
+
+    if solicitud.get("rut_solicitante") != sesion.identificador:
+        raise ErrorPermiso("Solo puede renovar sus propios prestamos")
+
+    estado_actual = solicitud["estado"]
+    nuevo_estado = estados.transicionar(estado_actual, "renovar", sesion.rol)
+
+    if dias > reglas.DIAS_MAX_RENOVACION:
+        raise ErrorReglaNegocio(
+            f"La renovacion no puede superar {reglas.DIAS_MAX_RENOVACION} dias (recibi {dias})"
+        )
+
+    renovaciones = solicitud.get("renovaciones", 0)
+    if renovaciones >= reglas.MAX_RENOVACIONES:
+        raise ErrorReglaNegocio("Ya se realizo la unica renovacion permitida")
+
+    # Nueva fecha de devolucion: fecha actual + dias
+    fecha_devolucion = (date.today() + timedelta(days=dias)).isoformat()
+    solicitud["fecha_devolucion"] = fecha_devolucion
+    solicitud["renovaciones"] = renovaciones + 1
+
+    modelos.registrar_cambio(solicitud, nuevo_estado, sesion.identificador)
+    almacen.reemplazar("solicitudes", "id", identificador, solicitud)
+    registro.evento(
+        "prestamo_renovado",
+        f"Solicitud {identificador} renovada por {dias} dias (total renovaciones: {solicitud['renovaciones']})",
+        actor=sesion.identificador,
+    )
+    return solicitud
 
 
 def actualizar_estados_por_fecha(hoy: date | None = None) -> list[dict]:
-    """Aplica las transiciones automaticas y devuelve las solicitudes tocadas.
+    """Aplica transiciones automaticas por fecha y devuelve solicitudes tocadas.
 
-    Se llama al iniciar la aplicacion y desde las pruebas con una fecha fija,
-    de manera que el paso del tiempo sea reproducible.
+    - en_prestamo -> periodo_gracia al pasar fecha_devolucion
+    - periodo_gracia -> atrasada al pasar DIAS_PERIODO_GRACIA
+    - aprobada -> cancelada si no se retira en DIAS_PARA_RETIRO
     """
-    raise NotImplementedError("RF08/RF11: transiciones automaticas por fecha")
+    if hoy is None:
+        hoy = date.today()
+
+    solicitudes = almacen.leer("solicitudes")
+    tocadas: list[dict] = []
+
+    for solicitud in solicitudes:
+        estado = solicitud.get("estado")
+        fecha_devolucion_str = solicitud.get("fecha_devolucion")
+        fecha_retiro_str = solicitud.get("fecha_retiro")
+        if not fecha_devolucion_str or not fecha_retiro_str:
+            continue
+
+        fecha_devolucion = date.fromisoformat(fecha_devolucion_str)
+        fecha_retiro = date.fromisoformat(fecha_retiro_str)
+
+        if estado == estados.EN_PRESTAMO and hoy > fecha_devolucion:
+            nuevo_estado = estados.transicionar(estado, "vencer", estados.SISTEMA)
+            modelos.registrar_cambio(solicitud, nuevo_estado, estados.SISTEMA)
+            tocadas.append(solicitud)
+
+        elif estado == estados.PERIODO_GRACIA:
+            fin_gracia = fecha_devolucion + timedelta(days=reglas.DIAS_PERIODO_GRACIA)
+            if hoy > fin_gracia:
+                nuevo_estado = estados.transicionar(estado, "atrasar", estados.SISTEMA)
+                modelos.registrar_cambio(solicitud, nuevo_estado, estados.SISTEMA)
+                # RF08.3: solicitante queda pendiente al atrasarse
+                solicitante = almacen.obtener("solicitantes", "rut", solicitud["rut_solicitante"])
+                solicitante["estado"] = reglas.SOLICITANTE_PENDIENTE
+                almacen.reemplazar("solicitantes", "rut", solicitud["rut_solicitante"], solicitante)
+                tocadas.append(solicitud)
+
+        elif estado == estados.APROBADA:
+            fin_retiro = fecha_retiro + timedelta(days=reglas.DIAS_PARA_RETIRO)
+            if hoy > fin_retiro:
+                nuevo_estado = estados.transicionar(estado, "cancelar", estados.SISTEMA)
+                modelos.registrar_cambio(solicitud, nuevo_estado, estados.SISTEMA)
+                tocadas.append(solicitud)
+
+    if tocadas:
+        almacen.escribir("solicitudes", solicitudes)
+
+    return tocadas
