@@ -67,3 +67,21 @@ trazabilidad. Las constantes viven en `src/prestamos/reglas.py`.
 | RF09 | Cancelar solicitud | solicitante | `servicios/solicitudes.py` |
 | RF10 | Declarar devolución | solicitante | `servicios/prestamos.py` |
 | RF11 | Renovar el préstamo | solicitante | `servicios/prestamos.py` |
+
+## Semántica de los filtros de RF06
+
+La definición inicial de los filtros dejaba solicitudes fuera de todo filtro y
+se ajustó al implementar. Esta es la definición vigente, que es la que el código
+aplica y la que verifican los casos CP-62 y CP-32.
+
+| Filtro | Qué incluye | Por qué |
+| --- | --- | --- |
+| `todas` | Todo lo visible para el rol | — |
+| `mias` | Solo las del solicitante de la sesión | Lo usa el menú del solicitante |
+| `vigentes` | `en_prestamo`, `periodo_gracia` y `atrasada` | Son los estados en que la persona tiene el equipo físicamente. Un préstamo atrasado sigue vigente para el laboratorio: el equipo está afuera |
+| `futuras` | `por_revisar` y `aprobada`, sin mirar la fecha | Una solicitud aprobada cuya fecha de retiro ya pasó pero que nadie retiró sigue siendo trabajo por delante. Filtrar por fecha la habría dejado invisible en todos los filtros |
+| `atrasadas` | `atrasada`, más cualquier solicitud activa cuya fecha de devolución ya venció | Se calcula por fecha y no leyendo un campo, así un atraso aparece apenas ocurre sin reescribir la solicitud |
+
+**`vigentes` y `atrasadas` se solapan a propósito.** Una solicitud atrasada
+aparece en ambos, porque responde a dos preguntas distintas: qué equipos están
+afuera, y a quién hay que reclamarle.

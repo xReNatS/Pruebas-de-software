@@ -265,7 +265,9 @@ def aprobar_solicitud(sesion: Sesion, identificador: str) -> dict:
             s for s in bloqueos.get(codigo, []) if s.get("id") != identificador
         ]
         if bloqueos_propios:
-            motivo = disponibilidad.motivo_no_disponible(codigo) or (
+            # El motivo tambien debe ignorar la solicitud que se esta
+            # aprobando: si no, nombra a esa misma solicitud como culpable.
+            motivo = disponibilidad.motivo_no_disponible(codigo, excepto=identificador) or (
                 f"El equipo {codigo} no esta disponible"
             )
             raise ErrorDisponibilidad(motivo)
@@ -316,21 +318,28 @@ def cancelar_solicitud(sesion: Sesion, identificador: str, motivo: str = "") -> 
     activa en disponibilidad.bloqueos_por_equipo().
     """
     solicitud = almacen.obtener("solicitudes", "id", identificador)
+    motivo_limpio = (motivo or "").strip() or None
 
-    # RF09.1: solo el dueno. El encargado tiene su propio flujo, pero la
-    # maquina de estados ya permite la transicion para encargado y
-    # solicitante; la regla de dueno se chequea explicitamente aca.
-    if solicitud.get("rut_solicitante") != sesion.identificador:
+    if sesion.es_encargado:
+        # RF09.4: el encargado tambien puede cancelar, y entonces el motivo es
+        # obligatorio. Es una cancelacion que la persona no pidio, asi que
+        # tiene que quedar dicho por que, y el historial lo conserva.
+        if not motivo_limpio:
+            raise ErrorValidacion(
+                "Cuando el encargado cancela una solicitud ajena, el motivo es obligatorio"
+            )
+    elif solicitud.get("rut_solicitante") != sesion.identificador:
+        # RF09.1: un solicitante solo cancela lo suyo.
         raise ErrorPermiso("Solo puede cancelar sus propias solicitudes")
 
-    motivo_limpio = (motivo or "").strip() or None
     nuevo_estado = estados.transicionar(solicitud["estado"], "cancelar", sesion.rol)
 
     modelos.registrar_cambio(solicitud, nuevo_estado, sesion.identificador, motivo_limpio)
     almacen.reemplazar("solicitudes", "id", identificador, solicitud)
     registro.evento(
         "solicitud_cancelada",
-        f"Solicitud {identificador} cancelada",
+        f"Solicitud {identificador} cancelada"
+        + (f": {motivo_limpio}" if motivo_limpio else ""),
         actor=sesion.identificador,
     )
     return solicitud

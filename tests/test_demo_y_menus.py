@@ -18,7 +18,7 @@ from prestamos.cli import menu_encargado, menu_solicitante
 OPCIONES_ENCARGADO = [
     "solicitante", "encargado", "personas", "estado",
     "equipo", "retirar", "catalogo", "detalle",
-    "solicitudes", "aprobar", "rechazar", "entregar", "confirmar", "logs",
+    "solicitudes", "aprobar", "rechazar", "cancelar", "entregar", "confirmar", "logs",
 ]
 
 OPCIONES_SOLICITANTE = [
