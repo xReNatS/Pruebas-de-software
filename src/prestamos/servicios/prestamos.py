@@ -39,10 +39,11 @@ Transiciones automaticas (ejecutadas por el sistema, no por una persona):
 
 from datetime import date
 
-from .. import almacen, modelos, registro
+from .. import almacen, modelos, registro, reglas
 from .. import estados
 from ..errores import ErrorPermiso
 from ..sesion import Sesion
+from . import personas
 
 
 def registrar_entrega(sesion: Sesion, identificador: str) -> dict:
@@ -83,14 +84,29 @@ def confirmar_devolucion(sesion: Sesion, identificador: str, observacion: str = 
         )
 
     solicitud = almacen.obtener("solicitudes", "id", identificador)
+    venia_atrasada = solicitud["estado"] == estados.ATRASADA
+
     nuevo_estado = estados.transicionar(solicitud["estado"], "concluir", sesion.rol)
     modelos.registrar_cambio(solicitud, nuevo_estado, sesion.identificador, observacion)
     almacen.reemplazar("solicitudes", "id", identificador, solicitud)
+
+    observacion_limpia = (observacion or "").strip()
     registro.evento(
         "devolucion_confirmada",
-        f"Solicitud {identificador} concluida por el encargado",
+        f"Solicitud {identificador} concluida por el encargado"
+        + (f". Observacion: {observacion_limpia}" if observacion_limpia else ""),
         actor=sesion.identificador,
     )
+
+    # RF08.4 / RN11: devolver no borra el atraso. Quien no devolvio a tiempo
+    # queda en estado 'pendiente' y no puede pedir de nuevo hasta que un
+    # encargado lo reactive a mano. Lo marca el sistema y no el encargado que
+    # recibe el equipo, porque no es una decision suya sino la regla.
+    if venia_atrasada:
+        personas.marcar_estado_por_sistema(
+            solicitud["rut_solicitante"], reglas.SOLICITANTE_PENDIENTE
+        )
+
     return solicitud
 
 
