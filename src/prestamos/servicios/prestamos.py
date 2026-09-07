@@ -40,7 +40,12 @@ Transiciones automaticas (ejecutadas por el sistema, no por una persona):
 from datetime import date, timedelta
 
 from .. import almacen, estados, modelos, registro, reglas
-from ..errores import ErrorPermiso, ErrorReglaNegocio, ErrorValidacion
+from ..errores import (
+    ErrorPermiso,
+    ErrorReglaNegocio,
+    ErrorTransicion,
+    ErrorValidacion,
+)
 from ..sesion import Sesion
 from . import personas
 
@@ -120,6 +125,22 @@ def declarar_devolucion(sesion: Sesion, identificador: str) -> dict:
     if solicitud.get("rut_solicitante") != sesion.identificador:
         raise ErrorPermiso("Solo puede declarar la devolucion de sus propias solicitudes")
 
+    # RF10.5: solo tiene sentido declarar lo que se tiene en la mano. Sin esta
+    # comprobacion se podia declarar la devolucion de una solicitud rechazada
+    # o cancelada, es decir de equipos que nunca salieron del laboratorio.
+    if solicitud["estado"] not in estados.ESTADOS_EN_PODER:
+        raise ErrorTransicion(
+            f"No se puede declarar la devolucion de una solicitud en estado "
+            f"'{solicitud['estado']}'. Solo se declara lo que ya se retiro: "
+            f"{', '.join(estados.ESTADOS_EN_PODER)}"
+        )
+
+    # RF10.4: declarar dos veces no mueve la fecha original ni ensucia el
+    # historial. Lo que vale es cuando el solicitante dijo por primera vez que
+    # devolvia, porque es la fecha que el encargado va a contrastar.
+    if solicitud.get("devolucion_declarada_en"):
+        return solicitud
+
     fecha_actual = date.today().isoformat()
     solicitud["devolucion_declarada_en"] = fecha_actual
     modelos.registrar_cambio(solicitud, solicitud["estado"], sesion.identificador)
@@ -148,18 +169,22 @@ def renovar_prestamo(sesion: Sesion, identificador: str, dias: int) -> dict:
     estado_actual = solicitud["estado"]
     nuevo_estado = estados.transicionar(estado_actual, "renovar", sesion.rol)
 
-    if dias > reglas.DIAS_MAX_RENOVACION:
-        raise ErrorReglaNegocio(
-            f"La renovacion no puede superar {reglas.DIAS_MAX_RENOVACION} dias (recibi {dias})"
+    if not 1 <= dias <= reglas.DIAS_MAX_RENOVACION:
+        raise ErrorValidacion(
+            f"La renovacion debe ser de entre 1 y {reglas.DIAS_MAX_RENOVACION} dias "
+            f"(recibi {dias})"
         )
 
     renovaciones = solicitud.get("renovaciones", 0)
     if renovaciones >= reglas.MAX_RENOVACIONES:
         raise ErrorReglaNegocio("Ya se realizo la unica renovacion permitida")
 
-    # Nueva fecha de devolucion: fecha actual + dias
-    fecha_devolucion = (date.today() + timedelta(days=dias)).isoformat()
-    solicitud["fecha_devolucion"] = fecha_devolucion
+    # RF11.5: la extension cuenta desde la fecha de devolucion original, no
+    # desde hoy. Como solo se renueva en periodo de gracia, hoy siempre es
+    # posterior al vencimiento: calcular desde hoy regalaria dias, y mientras
+    # mas se demorase el solicitante en renovar, mas dias ganaria.
+    devolucion_original = date.fromisoformat(solicitud["fecha_devolucion"])
+    solicitud["fecha_devolucion"] = (devolucion_original + timedelta(days=dias)).isoformat()
     solicitud["renovaciones"] = renovaciones + 1
 
     modelos.registrar_cambio(solicitud, nuevo_estado, sesion.identificador)
@@ -173,52 +198,107 @@ def renovar_prestamo(sesion: Sesion, identificador: str, dias: int) -> dict:
 
 
 def actualizar_estados_por_fecha(hoy: date | None = None) -> list[dict]:
-    """Aplica transiciones automaticas por fecha y devuelve solicitudes tocadas.
+    """Aplica las transiciones automaticas por fecha. Rol: sistema.
 
-    - en_prestamo -> periodo_gracia al pasar fecha_devolucion
-    - periodo_gracia -> atrasada al pasar DIAS_PERIODO_GRACIA
-    - aprobada -> cancelada si no se retira en DIAS_PARA_RETIRO
+    AUT.1  en_prestamo    -> periodo_gracia  al pasar la fecha de devolucion
+    AUT.2  periodo_gracia -> atrasada        al pasar el dia de gracia
+    AUT.3  al marcar un atraso, el solicitante queda 'pendiente' (RN11)
+    AUT.4  aprobada       -> cancelada       si no se retira a tiempo
+    AUT.5  acepta una fecha explicita, para poder probar el paso del tiempo
+    AUT.6  es idempotente: la segunda corrida del mismo dia no cambia nada
+    AUT.7  cada cambio queda en el log con actor 'sistema'
+
+    Las transiciones se encadenan dentro de la misma corrida. Un prestamo
+    vencido hace tres semanas tiene que quedar 'atrasada' de inmediato: si
+    cada corrida avanzara un solo paso, al abrir la aplicacion quedaria en
+    'periodo_gracia' y le regalaria un dia de gracia que vencio hace mucho.
     """
-    if hoy is None:
-        hoy = date.today()
-
+    hoy = hoy or date.today()
     solicitudes = almacen.leer("solicitudes")
     tocadas: list[dict] = []
 
     for solicitud in solicitudes:
-        estado = solicitud.get("estado")
-        fecha_devolucion_str = solicitud.get("fecha_devolucion")
-        fecha_retiro_str = solicitud.get("fecha_retiro")
-        if not fecha_devolucion_str or not fecha_retiro_str:
-            continue
-
-        fecha_devolucion = date.fromisoformat(fecha_devolucion_str)
-        fecha_retiro = date.fromisoformat(fecha_retiro_str)
-
-        if estado == estados.EN_PRESTAMO and hoy > fecha_devolucion:
-            nuevo_estado = estados.transicionar(estado, "vencer", estados.SISTEMA)
-            modelos.registrar_cambio(solicitud, nuevo_estado, estados.SISTEMA)
+        if _avanzar_por_fecha(solicitud, hoy):
             tocadas.append(solicitud)
-
-        elif estado == estados.PERIODO_GRACIA:
-            fin_gracia = fecha_devolucion + timedelta(days=reglas.DIAS_PERIODO_GRACIA)
-            if hoy > fin_gracia:
-                nuevo_estado = estados.transicionar(estado, "atrasar", estados.SISTEMA)
-                modelos.registrar_cambio(solicitud, nuevo_estado, estados.SISTEMA)
-                # RF08.3: solicitante queda pendiente al atrasarse
-                solicitante = almacen.obtener("solicitantes", "rut", solicitud["rut_solicitante"])
-                solicitante["estado"] = reglas.SOLICITANTE_PENDIENTE
-                almacen.reemplazar("solicitantes", "rut", solicitud["rut_solicitante"], solicitante)
-                tocadas.append(solicitud)
-
-        elif estado == estados.APROBADA:
-            fin_retiro = fecha_retiro + timedelta(days=reglas.DIAS_PARA_RETIRO)
-            if hoy > fin_retiro:
-                nuevo_estado = estados.transicionar(estado, "cancelar", estados.SISTEMA)
-                modelos.registrar_cambio(solicitud, nuevo_estado, estados.SISTEMA)
-                tocadas.append(solicitud)
 
     if tocadas:
         almacen.escribir("solicitudes", solicitudes)
 
     return tocadas
+
+
+def _avanzar_por_fecha(solicitud: dict, hoy: date) -> bool:
+    """Aplica todas las transiciones que correspondan. Devuelve si cambio algo."""
+    cambio = False
+
+    # El bucle deja la solicitud en su estado final para la fecha dada, en vez
+    # de avanzar un paso por corrida.
+    while True:
+        siguiente = _siguiente_transicion(solicitud, hoy)
+        if siguiente is None:
+            return cambio
+
+        accion, motivo = siguiente
+        estado_anterior = solicitud["estado"]
+        nuevo_estado = estados.transicionar(estado_anterior, accion, estados.SISTEMA)
+        modelos.registrar_cambio(solicitud, nuevo_estado, estados.SISTEMA, motivo)
+        cambio = True
+
+        registro.evento(
+            "transicion_automatica",
+            f"Solicitud {solicitud['id']} paso de '{estado_anterior}' a "
+            f"'{nuevo_estado}': {motivo}",
+            actor=estados.SISTEMA,
+            nivel="WARNING" if nuevo_estado == estados.ATRASADA else "INFO",
+        )
+
+        # RN11: el atraso deja al solicitante sin poder pedir hasta que un
+        # encargado lo reactive. marcar_estado_por_sistema deja su propio
+        # evento en el log, con el mismo actor.
+        if nuevo_estado == estados.ATRASADA:
+            personas.marcar_estado_por_sistema(
+                solicitud["rut_solicitante"], reglas.SOLICITANTE_PENDIENTE
+            )
+
+
+def _siguiente_transicion(solicitud: dict, hoy: date) -> tuple[str, str] | None:
+    """Que corresponde hacerle a esta solicitud hoy, si es que algo."""
+    estado = solicitud.get("estado")
+
+    if estado == estados.EN_PRESTAMO:
+        devolucion = _fecha(solicitud, "fecha_devolucion")
+        if devolucion and hoy > devolucion:
+            return "vencer", f"vencio el plazo de devolucion ({devolucion.isoformat()})"
+
+    elif estado == estados.PERIODO_GRACIA:
+        devolucion = _fecha(solicitud, "fecha_devolucion")
+        if devolucion and hoy > devolucion + timedelta(days=reglas.DIAS_PERIODO_GRACIA):
+            return "atrasar", (
+                f"vencio el periodo de gracia de {reglas.DIAS_PERIODO_GRACIA} dia(s)"
+            )
+
+    elif estado == estados.APROBADA:
+        # AUT.4: el plazo corre desde la aprobacion, que es cuando el
+        # solicitante quedo habilitado para ir a buscar el equipo. Si el
+        # historial no la tiene, se cae a la fecha de retiro.
+        referencia = _fecha_de_aprobacion(solicitud) or _fecha(solicitud, "fecha_retiro")
+        if referencia and hoy > referencia + timedelta(days=reglas.DIAS_PARA_RETIRO):
+            return "cancelar", (
+                f"no se retiro dentro de los {reglas.DIAS_PARA_RETIRO} dias posteriores "
+                f"a la aprobacion"
+            )
+
+    return None
+
+
+def _fecha(solicitud: dict, campo: str) -> date | None:
+    valor = solicitud.get(campo)
+    return date.fromisoformat(valor) if valor else None
+
+
+def _fecha_de_aprobacion(solicitud: dict) -> date | None:
+    """Fecha en que la solicitud fue aprobada, leida del historial."""
+    for entrada in reversed(solicitud.get("historial", [])):
+        if entrada.get("estado") == estados.APROBADA and entrada.get("en"):
+            return date.fromisoformat(entrada["en"][:10])
+    return None

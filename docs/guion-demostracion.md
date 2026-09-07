@@ -5,7 +5,8 @@ cualquiera lo reproduzca siguiendo solo estos pasos. Cada acto muestra una
 decisión de diseño, no solo una pantalla.
 
 Los números de opción corresponden al menú actual. El caso CP-44 falla si
-alguien reordena las opciones sin actualizar este documento.
+alguien reordena las opciones, para avisar que este documento hay que
+revisarlo: los números se corren en cuanto se agrega una opción intermedia.
 
 ## Antes de empezar
 
@@ -156,7 +157,7 @@ período de gracia de su préstamo, que es la solicitud SOL-0005, hoy en estado
 
 ## Acto 6. Todo queda registrado
 
-Opción **14**, Ver log de eventos.
+Opción **15**, Ver log de eventos.
 
 > Aparecen los ingresos, los registros de Elena y del microscopio, y los
 > intentos fallidos. Cada línea trae la hora, el tipo de evento y quién lo
@@ -170,20 +171,27 @@ evidencia de eso está en `evidencias/sentry/`.
 
 ---
 
-## Lo que todavía no se puede demostrar
+## Acto 7. El ciclo completo del préstamo
 
-Las opciones **9 a 13** del menú del encargado y las opciones **3 a 7** del
-menú del solicitante responden `Funcionalidad pendiente`. Corresponden a RF05
-a RF11: crear solicitudes, aprobarlas, entregar, devolver y renovar.
+Ya no queda ninguna opción pendiente: los once requerimientos funcionan. Para
+recorrer un préstamo entero hacen falta las dos cuentas, alternando.
 
-Están cubiertas por quince casos de prueba ya escritos, hoy marcados como
-`xfail`, que sirven de contrato para quien las implemente:
+| Quién | Opción | Datos |
+| --- | --- | --- |
+| Ana | `3` Crear solicitud | Código `LAP-002`, retiro hoy, devolución en tres días |
+| Ana | `4` Ver mis solicitudes | Aparece en `por_revisar` |
+| Camila | `10` Aprobar | El id que salió, por ejemplo `SOL-0009` |
+| Camila | `13` Registrar entrega | El mismo id. Pasa a `en_prestamo` |
+| Ana | `6` Declarar devolución | El mismo id |
+| Camila | `14` Confirmar devolución | El mismo id, observación `Sin daños` |
+| Camila | `7` Ver catálogo | `LAP-002` volvió a estar `disponible` |
 
-```powershell
-.\make.ps1 probar-pendientes
-```
-
-Esa lista se vacía sola a medida que los requerimientos se van implementando.
+**Qué mostrar acá.** Declarar la devolución **no** libera el equipo. Entre el
+paso de Ana y el de Camila, el catálogo sigue mostrando `LAP-002` en uso. La
+unidad se libera solo cuando el encargado confirma que la recibió, porque la
+responsabilidad física es de quien tiene el equipo en la mano. Esa fue una
+decisión del equipo frente a una ambigüedad del enunciado, documentada en
+`docs/supuestos.md`, punto A07.
 
 ---
 

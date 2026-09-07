@@ -3,8 +3,9 @@
 Responsable del diseno de estas pruebas: integrante A (prueba cruzada, ya que
 la implementacion de estos requerimientos corre por cuenta del integrante B).
 
-Los casos estan marcados con xfail hasta que exista el servicio. Al implementar
-el requerimiento se quita la marca y el caso debe pasar sin cambiar su cuerpo.
+Todos los requerimientos estan implementados, asi que ya no queda ningun caso
+marcado: los quince se ejecutan de verdad. Ninguno de estos cuerpos se modifico
+al implementar, que era la condicion del contrato.
 """
 
 from datetime import date, timedelta
@@ -23,8 +24,6 @@ from prestamos.servicios import prestamos as srv_prestamos
 from prestamos.servicios import solicitudes as srv_solicitudes
 
 from conftest import RUT_ANA, RUT_BRUNO
-
-pendiente = pytest.mark.xfail(raises=NotImplementedError, reason="RF08, RF10 y RF11 no implementados")
 
 HOY = date.today()
 MANANA = HOY + timedelta(days=1)
@@ -150,7 +149,6 @@ def test_cp34_solicitante_no_cancela_solicitudes_ajenas(
         srv_solicitudes.cancelar_solicitud(sesion_bruno, "SOL-0001")
 
 
-@pendiente
 @pytest.mark.reglas
 def test_cp35_declarar_devolucion_no_libera_el_equipo(
     datos_base, sesion_ana, crear_solicitud_directa
@@ -164,7 +162,6 @@ def test_cp35_declarar_devolucion_no_libera_el_equipo(
     assert disponibilidad.esta_bloqueado("LAP-001") is True
 
 
-@pendiente
 @pytest.mark.borde
 def test_cp36_una_sola_renovacion(datos_base, sesion_ana, crear_solicitud_directa):
     """CP-36: la segunda renovacion se rechaza."""
@@ -176,7 +173,6 @@ def test_cp36_una_sola_renovacion(datos_base, sesion_ana, crear_solicitud_direct
         srv_prestamos.renovar_prestamo(sesion_ana, "SOL-0001", 3)
 
 
-@pendiente
 @pytest.mark.reglas
 def test_cp37_atraso_deja_al_solicitante_pendiente(datos_base, crear_solicitud_directa):
     """CP-37: al pasar el periodo de gracia, la persona queda en estado pendiente."""
@@ -192,7 +188,6 @@ def test_cp37_atraso_deja_al_solicitante_pendiente(datos_base, crear_solicitud_d
     assert almacen.obtener("solicitantes", "rut", RUT_ANA)["estado"] == reglas.SOLICITANTE_PENDIENTE
 
 
-@pendiente
 @pytest.mark.escenario
 def test_cp38_escenario_completo_de_solicitud_a_devolucion(datos_base, sesion_ana, sesion_encargado):
     """CP-38: recorrido completo, desde crear la solicitud hasta liberar el equipo.
