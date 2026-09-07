@@ -161,21 +161,185 @@ def crear_solicitud(
 
 
 def listar_solicitudes(sesion: Sesion, filtro: str = "todas") -> list[dict]:
-    """filtro: todas | vigentes | futuras | atrasadas | mias."""
-    raise NotImplementedError("RF06: consultar solicitudes")
+    """filtro: todas | vigentes | futuras | atrasadas | mias.
+
+    RF06.1: un solicitante ve unicamente sus propias solicitudes, salvo que
+    pida explicitamente "mias" (el menu del solicitante siempre lo hace).
+    RF06.2: un encargado ve todas y aplica el filtro que pidio.
+    RF06.3: "atrasadas" se calcula por fecha contra hoy, no mirando un
+    campo persistido, de modo que un atraso nuevo aparezca en el listado
+    apenas ocurre, sin necesidad de reescribir la solicitud.
+    """
+    filtro_normalizado = (filtro or "todas").strip().lower()
+    filtros_validos = {"todas", "vigentes", "futuras", "atrasadas", "mias"}
+    if filtro_normalizado not in filtros_validos:
+        raise ErrorValidacion(
+            f"Filtro desconocido: {filtro!r}. Use uno de {sorted(filtros_validos)}"
+        )
+
+    solicitudes = almacen.leer("solicitudes")
+
+    # RF06.1: el solicitante solo ve las suyas. "mias" lo pide el menu del
+    # solicitante; cualquier otro filtro sobre un solicitante se restringe
+    # igual, asi nadie ve lo ajeno por cambiar el nombre del filtro.
+    if sesion.es_solicitante or filtro_normalizado == "mias":
+        solicitudes = [s for s in solicitudes if s.get("rut_solicitante") == sesion.identificador]
+
+    hoy = date.today()
+
+    def _a_fecha(campo: str, solicitud: dict) -> date | None:
+        valor = solicitud.get(campo)
+        if not valor:
+            return None
+        return date.fromisoformat(valor)
+
+    if filtro_normalizado == "todas" or filtro_normalizado == "mias":
+        resultado = solicitudes
+    elif filtro_normalizado == "vigentes":
+        # La persona tiene el equipo en estos estados.
+        resultado = [s for s in solicitudes if s.get("estado") in estados.ESTADOS_EN_PODER]
+    elif filtro_normalizado == "futuras":
+        # Aun no se entrego: la solicitud esta en cola (por_revisar o
+        # aprobada) sin importar la fecha de retiro, porque si ya paso y
+        # sigue sin entregar, sigue siendo "lo que viene".
+        resultado = [
+            s for s in solicitudes if s.get("estado") in (estados.POR_REVISAR, estados.APROBADA)
+        ]
+    else:  # atrasadas
+        # Calculado por fecha (RF06.3): la solicitud sigue activa pero su
+        # fecha de devolucion ya vencio, o el sistema la marco atrasada.
+        resultado = []
+        for s in solicitudes:
+            if s.get("estado") == estados.ATRASADA:
+                resultado.append(s)
+                continue
+            if s.get("estado") not in estados.ESTADOS_ACTIVOS:
+                continue
+            devolucion = _a_fecha("fecha_devolucion", s)
+            if devolucion is not None and devolucion < hoy:
+                resultado.append(s)
+
+    # Orden estable: por id para que la presentacion en tabla no salte.
+    return sorted(resultado, key=lambda s: s.get("id", ""))
+
 
 
 def detalle_solicitud(sesion: Sesion, identificador: str) -> dict:
-    raise NotImplementedError("RF06: detalle de solicitud")
+    """RF06: devuelve una solicitud puntual.
+
+    Un solicitante solo puede ver el detalle de las suyas; un encargado
+    puede ver cualquiera. La regla de visibilidad es la misma que en
+    listar_solicitudes, simplemente aplicada a un unico registro.
+    """
+    solicitud = almacen.obtener("solicitudes", "id", identificador)
+    if sesion.es_solicitante and solicitud.get("rut_solicitante") != sesion.identificador:
+        raise ErrorPermiso("Solo puede ver el detalle de sus propias solicitudes")
+    return solicitud
 
 
 def aprobar_solicitud(sesion: Sesion, identificador: str) -> dict:
-    raise NotImplementedError("RF07: aprobar solicitud")
+    """RF07.1 / RF07.2 / RF07.3: encarga pasa 'por_revisar' a 'aprobada'.
+
+    La maquina de estados se delega a estados.transicionar, que se encarga
+    de validar el origen y el rol. Antes de persistir se vuelve a chequear
+    la disponibilidad de los equipos pedidos (RF07.3), porque entre que la
+    solicitud se creo y se revisa otro pedido puede haber tomado el mismo
+    equipo: la transicion automatica del estado no nos protege de eso.
+    """
+    if not sesion.es_encargado:
+        raise ErrorPermiso(
+            f"Esta operacion requiere el rol 'encargado' y la sesion es '{sesion.rol}'"
+        )
+
+    solicitud = almacen.obtener("solicitudes", "id", identificador)
+    nuevo_estado = estados.transicionar(solicitud["estado"], "aprobar", sesion.rol)
+
+    # RF07.3: revalidar disponibilidad de cada equipo. La tabla se calcula
+    # una vez y se reusa para los motivos legibles.
+    bloqueos = disponibilidad.bloqueos_por_equipo()
+    for codigo in solicitud.get("equipos", []):
+        # Si la propia solicitud ya lo bloqueaba, lo ignoramos: pertenece al
+        # mismo flujo que estamos aprobando. Cualquier otra solicitud
+        # activa sobre el mismo equipo, en cambio, si cuenta.
+        bloqueos_propios = [
+            s for s in bloqueos.get(codigo, []) if s.get("id") != identificador
+        ]
+        if bloqueos_propios:
+            # El motivo tambien debe ignorar la solicitud que se esta
+            # aprobando: si no, nombra a esa misma solicitud como culpable.
+            motivo = disponibilidad.motivo_no_disponible(codigo, excepto=identificador) or (
+                f"El equipo {codigo} no esta disponible"
+            )
+            raise ErrorDisponibilidad(motivo)
+
+    modelos.registrar_cambio(solicitud, nuevo_estado, sesion.identificador)
+    almacen.reemplazar("solicitudes", "id", identificador, solicitud)
+    registro.evento("solicitud_aprobada", f"Solicitud {identificador} aprobada", actor=sesion.identificador)
+    return solicitud
 
 
 def rechazar_solicitud(sesion: Sesion, identificador: str, motivo: str) -> dict:
-    raise NotImplementedError("RF07: rechazar solicitud")
+    """RF07.1 / RF07.2 / RF07.4: encarga pasa 'por_revisar' a 'rechazada'.
+
+    El motivo es obligatorio (RF07.4) y se guarda tanto en el campo
+    'motivo' como en el historial, para que quede registro de quien
+    rechazo y por que.
+    """
+    if not sesion.es_encargado:
+        raise ErrorPermiso(
+            f"Esta operacion requiere el rol 'encargado' y la sesion es '{sesion.rol}'"
+        )
+
+    motivo_limpio = (motivo or "").strip()
+    if not motivo_limpio:
+        raise ErrorValidacion("El rechazo requiere un motivo no vacio")
+
+    solicitud = almacen.obtener("solicitudes", "id", identificador)
+    nuevo_estado = estados.transicionar(solicitud["estado"], "rechazar", sesion.rol)
+
+    modelos.registrar_cambio(solicitud, nuevo_estado, sesion.identificador, motivo_limpio)
+    almacen.reemplazar("solicitudes", "id", identificador, solicitud)
+    registro.evento(
+        "solicitud_rechazada",
+        f"Solicitud {identificador} rechazada: {motivo_limpio}",
+        actor=sesion.identificador,
+    )
+    return solicitud
 
 
 def cancelar_solicitud(sesion: Sesion, identificador: str, motivo: str = "") -> dict:
-    raise NotImplementedError("RF09: cancelar solicitud")
+    """RF09.1 / RF09.2 / RF09.3: el dueno cancela su propia solicitud.
+
+    Solo se cancela en 'por_revisar' o 'aprobada' (RF09.2); una vez
+    entregado el equipo el camino correcto es la devolucion (RF10/RF08).
+    Como todavia no se entrego, los equipos vuelven a estar disponibles
+    de inmediato (RF09.3) sin necesidad de tocar el estado de los
+    equipos: al pasar la solicitud a 'cancelada' deja de contar como
+    activa en disponibilidad.bloqueos_por_equipo().
+    """
+    solicitud = almacen.obtener("solicitudes", "id", identificador)
+    motivo_limpio = (motivo or "").strip() or None
+
+    if sesion.es_encargado:
+        # RF09.4: el encargado tambien puede cancelar, y entonces el motivo es
+        # obligatorio. Es una cancelacion que la persona no pidio, asi que
+        # tiene que quedar dicho por que, y el historial lo conserva.
+        if not motivo_limpio:
+            raise ErrorValidacion(
+                "Cuando el encargado cancela una solicitud ajena, el motivo es obligatorio"
+            )
+    elif solicitud.get("rut_solicitante") != sesion.identificador:
+        # RF09.1: un solicitante solo cancela lo suyo.
+        raise ErrorPermiso("Solo puede cancelar sus propias solicitudes")
+
+    nuevo_estado = estados.transicionar(solicitud["estado"], "cancelar", sesion.rol)
+
+    modelos.registrar_cambio(solicitud, nuevo_estado, sesion.identificador, motivo_limpio)
+    almacen.reemplazar("solicitudes", "id", identificador, solicitud)
+    registro.evento(
+        "solicitud_cancelada",
+        f"Solicitud {identificador} cancelada"
+        + (f": {motivo_limpio}" if motivo_limpio else ""),
+        actor=sesion.identificador,
+    )
+    return solicitud

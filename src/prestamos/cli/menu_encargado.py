@@ -20,6 +20,7 @@ OPCIONES = [
     ("solicitudes", "Ver y filtrar solicitudes (RF06)"),
     ("aprobar", "Aprobar solicitud (RF07)"),
     ("rechazar", "Rechazar solicitud (RF07)"),
+    ("cancelar", "Cancelar una solicitud ajena (RF09)"),
     ("entregar", "Registrar entrega de equipos (RF08)"),
     ("confirmar", "Confirmar devolucion (RF08)"),
     ("logs", "Ver log de eventos"),
@@ -133,6 +134,11 @@ def _despachar(sesion: Sesion, opcion: str) -> None:
         identificador = pedir("ID de la solicitud")
         motivo = pedir("Motivo del rechazo")
         ejecutar(lambda: srv_solicitudes.rechazar_solicitud(sesion, identificador, motivo), actor)
+
+    elif opcion == "cancelar":
+        identificador = pedir("ID de la solicitud")
+        motivo = pedir("Motivo de la cancelacion")
+        ejecutar(lambda: srv_solicitudes.cancelar_solicitud(sesion, identificador, motivo), actor)
 
     elif opcion == "entregar":
         identificador = pedir("ID de la solicitud")

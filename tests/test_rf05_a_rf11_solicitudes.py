@@ -24,7 +24,7 @@ from prestamos.servicios import solicitudes as srv_solicitudes
 
 from conftest import RUT_ANA, RUT_BRUNO
 
-pendiente = pytest.mark.xfail(raises=NotImplementedError, reason="RF06 a RF11 no implementados")
+pendiente = pytest.mark.xfail(raises=NotImplementedError, reason="RF08, RF10 y RF11 no implementados")
 
 HOY = date.today()
 MANANA = HOY + timedelta(days=1)
@@ -116,7 +116,6 @@ def test_cp31_con_dos_equipos_en_poder_no_puede_pedir_mas(
         srv_solicitudes.crear_solicitud(sesion_ana, ["ARD-001"], MANANA, EN_CINCO_DIAS)
 
 
-@pendiente
 @pytest.mark.funcional
 def test_cp32_aprobar_y_rechazar(datos_base, sesion_encargado, crear_solicitud_directa):
     """CP-32: RF07 mueve la solicitud a aprobada o rechazada con motivo."""
@@ -131,7 +130,6 @@ def test_cp32_aprobar_y_rechazar(datos_base, sesion_encargado, crear_solicitud_d
     assert rechazada["motivo"] == "Equipo en revision"
 
 
-@pendiente
 @pytest.mark.negativo
 def test_cp33_no_se_aprueba_dos_veces(datos_base, sesion_encargado, crear_solicitud_directa):
     """CP-33: aprobar una solicitud ya aprobada levanta ErrorTransicion."""
@@ -141,7 +139,6 @@ def test_cp33_no_se_aprueba_dos_veces(datos_base, sesion_encargado, crear_solici
         srv_solicitudes.aprobar_solicitud(sesion_encargado, "SOL-0001")
 
 
-@pendiente
 @pytest.mark.negativo
 def test_cp34_solicitante_no_cancela_solicitudes_ajenas(
     datos_base, sesion_bruno, crear_solicitud_directa

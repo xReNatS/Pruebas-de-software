@@ -59,14 +59,21 @@ def estado_calculado(equipo: dict, bloqueos: dict[str, list[dict]] | None = None
     return EQUIPO_EN_USO if esta_bloqueado(equipo["codigo"], bloqueos) else EQUIPO_DISPONIBLE
 
 
-def motivo_no_disponible(codigo: str) -> str | None:
-    """Explicacion legible de por que un equipo no se puede pedir."""
+def motivo_no_disponible(codigo: str, excepto: str | None = None) -> str | None:
+    """Explicacion legible de por que un equipo no se puede pedir.
+
+    `excepto` permite ignorar una solicitud al construir el motivo. Lo usa
+    RF07 al reaprobar: la solicitud que se esta aprobando bloquea sus propios
+    equipos, asi que sin este filtro el mensaje diria que la solicitud esta
+    bloqueada por si misma, que es cierto y completamente inutil para quien
+    lo lee.
+    """
     equipo = almacen.buscar("equipos", "codigo", codigo)
     if equipo is None:
         return f"El equipo {codigo} no existe"
     if equipo.get("estado") == EQUIPO_FUERA_SERVICIO:
         return f"El equipo {codigo} esta fuera de servicio"
-    activas = bloqueos_por_equipo().get(codigo, [])
+    activas = [s for s in bloqueos_por_equipo().get(codigo, []) if s.get("id") != excepto]
     if activas:
         solicitud = activas[0]
         return (
