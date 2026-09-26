@@ -1,7 +1,7 @@
 ============================= test session starts =============================
-platform win32 -- Python 3.13.2, pytest-8.3.4, pluggy-1.6.0 -- C:\Users\renar\OneDrive\Escritorio\VisualStudioProjects\Pruebas de software\Pruebas-de-software\.venv\Scripts\python.exe
+platform win32 -- Python 3.14.7, pytest-8.3.4, pluggy-1.6.0 -- D:\USM\pruebas_sw\Pruebas-de-software\.venv\Scripts\python.exe
 cachedir: .pytest_cache
-rootdir: C:\Users\renar\OneDrive\Escritorio\VisualStudioProjects\Pruebas de software\Pruebas-de-software
+rootdir: D:\USM\pruebas_sw\Pruebas-de-software
 configfile: pytest.ini
 testpaths: tests
 collecting ... collected 119 items
@@ -126,5 +126,5 @@ tests/test_validaciones.py::test_cp15_rut_invalido_es_rechazado[None] PASSED [ 9
 tests/test_validaciones.py::test_cp15_rut_invalido_es_rechazado[abcdefgh-1] PASSED [ 99%]
 tests/test_validaciones.py::test_cp15_rut_invalido_es_rechazado[12345678] PASSED [100%]
 
----- generated xml file: C:\Users\renar\AppData\Local\Temp\tmp29e2usdg.xml ----
-============================ 119 passed in 46.47s =============================
+--- generated xml file: C:\Users\gonzalo\AppData\Local\Temp\tmpdjtr8ugk.xml ---
+============================ 119 passed in 14.48s =============================

@@ -1,0 +1,20 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.7, pytest-8.3.4, pluggy-1.6.0 -- D:\USM\pruebas_sw\Pruebas-de-software\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\USM\pruebas_sw\Pruebas-de-software
+configfile: pytest.ini
+collecting ... collected 11 items
+
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp16_encargado_registra_solicitante PASSED [  9%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp17_solicitante_no_puede_registrar_personas PASSED [ 18%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp18_rut_duplicado_es_rechazado PASSED [ 27%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp19_encargado_registra_equipo PASSED [ 36%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp20_dos_unidades_del_mismo_modelo PASSED [ 45%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp21_codigo_de_equipo_duplicado PASSED [ 54%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp22_categoria_vacia_es_rechazada PASSED [ 63%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp23_solicitante_solo_ve_equipos_disponibles PASSED [ 72%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp24_correo_repetido_entre_colecciones PASSED [ 81%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp25_codigo_normalizado_minusculas_y_espacios PASSED [ 90%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp26_busqueda_sin_resultados PASSED [100%]
+
+============================= 11 passed in 1.65s ==============================

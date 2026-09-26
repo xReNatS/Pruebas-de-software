@@ -1,0 +1,35 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.7, pytest-8.3.4, pluggy-1.6.0 -- D:\USM\pruebas_sw\Pruebas-de-software\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\USM\pruebas_sw\Pruebas-de-software
+configfile: pytest.ini
+collecting ... collected 26 items
+
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp16_encargado_registra_solicitante PASSED [  3%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp17_solicitante_no_puede_registrar_personas PASSED [  7%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp18_rut_duplicado_es_rechazado PASSED [ 11%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp19_encargado_registra_equipo PASSED [ 15%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp20_dos_unidades_del_mismo_modelo PASSED [ 19%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp21_codigo_de_equipo_duplicado PASSED [ 23%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp22_categoria_vacia_es_rechazada PASSED [ 26%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp23_solicitante_solo_ve_equipos_disponibles PASSED [ 30%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp24_correo_repetido_entre_colecciones PASSED [ 34%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp25_codigo_normalizado_minusculas_y_espacios PASSED [ 38%]
+tests/test_rf02_rf03_rf04_personas_equipos.py::test_cp26_busqueda_sin_resultados PASSED [ 42%]
+tests/test_rf05_a_rf11_solicitudes.py::test_cp24_crear_solicitud_valida PASSED [ 46%]
+tests/test_rf05_a_rf11_solicitudes.py::test_cp25_encargado_no_puede_crear_solicitudes PASSED [ 50%]
+tests/test_rf05_a_rf11_solicitudes.py::test_cp26_dos_equipos_de_la_misma_categoria PASSED [ 53%]
+tests/test_rf05_a_rf11_solicitudes.py::test_cp27_tope_de_equipos_por_solicitud PASSED [ 57%]
+tests/test_rf05_a_rf11_solicitudes.py::test_cp28_duracion_maxima_de_una_semana PASSED [ 61%]
+tests/test_rf05_a_rf11_solicitudes.py::test_cp29_equipo_ya_tomado_por_otra_persona PASSED [ 65%]
+tests/test_rf05_a_rf11_solicitudes.py::test_cp30_solicitante_pendiente_no_puede_pedir PASSED [ 69%]
+tests/test_rf05_a_rf11_solicitudes.py::test_cp31_con_dos_equipos_en_poder_no_puede_pedir_mas PASSED [ 73%]
+tests/test_rf05_a_rf11_solicitudes.py::test_cp32_aprobar_y_rechazar PASSED [ 76%]
+tests/test_rf05_a_rf11_solicitudes.py::test_cp33_no_se_aprueba_dos_veces PASSED [ 80%]
+tests/test_rf05_a_rf11_solicitudes.py::test_cp34_solicitante_no_cancela_solicitudes_ajenas PASSED [ 84%]
+tests/test_rf05_a_rf11_solicitudes.py::test_cp35_declarar_devolucion_no_libera_el_equipo PASSED [ 88%]
+tests/test_rf05_a_rf11_solicitudes.py::test_cp36_una_sola_renovacion PASSED [ 92%]
+tests/test_rf05_a_rf11_solicitudes.py::test_cp37_atraso_deja_al_solicitante_pendiente PASSED [ 96%]
+tests/test_rf05_a_rf11_solicitudes.py::test_cp38_escenario_completo_de_solicitud_a_devolucion PASSED [100%]
+
+============================= 26 passed in 3.85s ==============================

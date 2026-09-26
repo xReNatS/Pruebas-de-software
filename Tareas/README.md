@@ -206,6 +206,7 @@ src/prestamos/
 data/                archivos JSON de persistencia
 docs/                reglas, estados, supuestos, trazabilidad y estrategia
 evidencias/          salidas de ejecución de las pruebas, por fecha
+informe/             informe en formato PDF
 scripts/             envoltura de línea de comando para la carga de demo
 tests/               suite de pytest
 ```
